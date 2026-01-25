@@ -1,5 +1,6 @@
 from bkmrks import bkmrks
 
+
 def generate(md_file_name="public/index", yaml_file_name="index"):
     bookmarks = bkmrks.get(file_name=yaml_file_name)
     md_file_content = ""

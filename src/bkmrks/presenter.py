@@ -2,6 +2,7 @@ import os
 
 import markdown
 
+
 def generate_html(md_file="public/index", template="index"):
     ensure_public_folder()
     md_file = md_file.split(".")[0] + ".md"
@@ -58,6 +59,7 @@ def ensure_public_folder():
     if not os.path.exists("public"):
         os.mkdir("public")
 
+
 def ensure_template_folder():
     if not os.path.exists("templates"):
         os.mkdir("templates")
@@ -66,7 +68,7 @@ def ensure_template_folder():
         )
         files = os.listdir(default_templates_dir)
         for file in files:
-            if file.split(".")[1] in ["css","html"]:
-                with open(os.path.join(default_templates_dir,file),"r+") as fr:
-                    with open(os.path.join("templates",file),"+w") as fw:
+            if file.split(".")[1] in ["css", "html"]:
+                with open(os.path.join(default_templates_dir, file), "r+") as fr:
+                    with open(os.path.join("templates", file), "+w") as fw:
                         fw.write(fr.read())

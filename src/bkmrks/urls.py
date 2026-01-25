@@ -3,6 +3,7 @@ from urllib.parse import urlparse
 import requests
 from bs4 import BeautifulSoup
 
+
 def ensure_domain(url, domain):
     if not url.startswith("https"):
         if url.startswith("/"):

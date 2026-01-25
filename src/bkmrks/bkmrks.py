@@ -81,5 +81,13 @@ def html2yaml(html_file_name, yaml_file_name):
 def ensure_bookmarks_folder():
     if not os.path.exists("bookmarks"):
         os.mkdir("bookmarks")
-        data = {"l1":{"b1":{"name":"bkmrks_page", "img":"https://cesarcardoso.cc/README/1_bouli.png", "url":"https://github.com/bouli/bkmrks"}}}
+        data = {
+            "l1": {
+                "b1": {
+                    "name": "bkmrks_page",
+                    "img": "https://cesarcardoso.cc/README/1_bouli.png",
+                    "url": "https://github.com/bouli/bkmrks",
+                }
+            }
+        }
         set_yaml(data=data)
