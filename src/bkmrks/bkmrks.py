@@ -141,6 +141,23 @@ def edit_bookmark(url, catalog="index", l=1, b=0, action='add'):
     set(data=catalog_data_new,catalog=catalog)
     return True
 
+def get_url(catalog="index", l=1, b=1,):
+    url = None
+    if l < 1:
+        l = 1
+    if b < 1:
+        b = 1
+    catalog_data = get(catalog=catalog)
+    if len(catalog_data) == 0:
+        return
+    if len(list(catalog_data.values())) >= l:
+        line = list(catalog_data.values())[l-1]
+        if len(list(line.values())) >= b:
+            if 'url' in list(line.values())[b-1]:
+                url = list(line.values())[b-1]['url']
+
+    return url
+
 def get_l_name(l):
     l_name = f"l{l:04d}"
     return l_name
