@@ -1,0 +1,23 @@
+[project]
+name = "bkmrks"
+version = "0.1.0"
+license = "MIT"
+description = "🔖 Bkmrks helps you to manage your bookmarks."
+readme = "README.md"
+authors = [
+    { name = "Cesar Cardoso", email = "hello@cesarcardoso.cc" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "bs4>=0.0.2",
+    "markdown>=3.10.1",
+    "pyyaml>=6.0.3",
+    "requests>=2.32.5",
+]
+
+[project.scripts]
+bkmrks = "bkmrks:main"
+
+
+[tool.setuptools.package-data]
+"*" = ["*.*"] # <-- this changed
