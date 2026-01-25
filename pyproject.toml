@@ -14,6 +14,9 @@ dependencies = [
     "pyyaml>=6.0.3",
     "requests>=2.32.5",
 ]
+[project.urls]
+Repository = "https://github.com/bouli/bkmrks"
+Changelog = "https://github.com/bouli/bkmrks/releases/latest"
 
 [project.scripts]
 bkmrks = "bkmrks:main"
@@ -21,3 +24,21 @@ bkmrks = "bkmrks:main"
 
 [tool.setuptools.package-data]
 "*" = ["*.*"] # <-- this changed
+
+
+[tool.bumpversion]
+tag = true
+tag_name = "v{new_version}"
+pre_commit_hooks = ["uvx isort ./src", "uvx black ./src", "git add src", "uv sync --upgrade", "git add uv.lock"]
+commit = true
+
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+search = 'version = "{current_version}"'
+replace = 'version = "{new_version}"'
+
+[[tool.bumpversion.files]]
+filename = "README.md"
+
+[[tool.bumpversion.files]]
+filename = "src/bkmrks/__init__.py"

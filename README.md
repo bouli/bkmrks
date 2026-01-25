@@ -24,7 +24,7 @@ uvx bkmrks --version
 
 You can start just rendering your first bookmarks page with:
 ```shell
-uvx bkmrks render
+bkmrks render
 ```
 That will create your rendered homepage at the `public` folder.
 
@@ -32,3 +32,17 @@ Edit the `bookmarks/index.yaml` file with your own bookmarks.
 The `yaml` file has the first node to `lines` and the second node for `urls`.
 
 You can modify the template in the template folder.
+
+That's the basic usage!
+But you can understand more using the help:
+```shell
+bkmrks --help
+```
+
+## See Also
+
+- Github: https://github.com/bouli/bkmrks
+- PyPI: https://pypi.org/project/bkmrks/
+
+## License
+This package is distributed under the [MIT license](https://opensource.org/license/MIT).
