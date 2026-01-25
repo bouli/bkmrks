@@ -20,12 +20,12 @@ def main():
     )
 
     load_parser.add_argument(
-        "-h",
+        "-html",
         help="HTML file/url to scrape.",
     )
 
     load_parser.add_argument(
-        "-b",
+        "-catalog",
         help="Bookmark catalog name.",
     )
 
@@ -34,7 +34,7 @@ def main():
         render()
 
     if args.command == "render":
-        bkmrks.html2yaml(html_file_name=args.h, yaml_file_name=args.b)
+        bkmrks.html2yaml(html_file_name=args.html, yaml_file_name=args.catalog)
     return
 
 
