@@ -60,6 +60,8 @@ def get_url_icon(url):
                     soup = BeautifulSoup(r.text, features="html.parser")
                     if soup.find("img") is not None:
                         img = soup.find("img")["src"]
+                    else:
+                        img = get_default_img(text=href_parse.netloc)
             else:
                 img = soup.find("img")["src"]
     if not img.startswith("http"):
@@ -69,3 +71,16 @@ def get_url_icon(url):
             separator = "/"
         img = separator.join([domain, img])
     return img
+
+def get_default_img(text):
+    return f"https://ui-avatars.com/api/?name={text}"
+
+def get_name_by_domain(url):
+    href_parse = urlparse(url)
+    name = href_parse.netloc.split(".")
+
+    if name[-2] == "google":
+        name = "_".join(name[:-1][::-1])
+    else:
+        name = name[-2]
+    return name

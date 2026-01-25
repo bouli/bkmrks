@@ -1,4 +1,4 @@
-from bkmrks import bkmrks
+from bkmrks import bkmrks, urls
 
 
 def generate(md_file_name="public/index", catalog="index"):
@@ -18,9 +18,19 @@ def generate(md_file_name="public/index", catalog="index"):
 
 
 def md_a_img(item):
-    name = item["name"]
-    url = item["url"]
-    img = item["img"]
+    try:
+        url = item["url"]
+    except:
+        return ""
+    if "name" in item:
+        name = item["name"]
+    else:
+        name = urls.get_name_by_domain(url=url)
+
+    if "img" in item:
+        img = item["img"]
+    else:
+        img = urls.get_default_img(text=name)
 
     return f'\n[![{name}]({img})]({url} "{name}")'
 

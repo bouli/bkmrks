@@ -5,7 +5,7 @@ import requests
 import yaml
 from bs4 import BeautifulSoup
 
-from bkmrks.urls import ensure_domain, get_url_icon
+from bkmrks import urls
 
 def catalogs_folder():
     return "catalogs"
@@ -57,9 +57,8 @@ def html2catalog(html_file_name, catalog):
         elif item.has_attr("href") and not item["href"].startswith("#"):
             b += 1
 
-            item["href"] = ensure_domain(url=item["href"], domain=domain)
+            item["href"] = urls.ensure_domain(url=item["href"], domain=domain)
 
-            href_parse = urlparse(item["href"])
             has_img = False
             if len(item.find_all("img")) > 0:
                 if len(item.find("img")["src"]) < 200:
@@ -67,14 +66,9 @@ def html2catalog(html_file_name, catalog):
             if has_img:
                 img = item.find("img")["src"]
             else:
-                img = get_url_icon(item["href"])
+                img = urls.get_url_icon(item["href"])
             url = item["href"]
-            name = href_parse.netloc.split(".")
-
-            if name[-2] == "google":
-                name = "_".join(name[:-1][::-1])
-            else:
-                name = name[-2]
+            name = urls.get_name_by_domain(url=url)
             item = {}
             item["name"] = name
             item["url"] = url
@@ -90,20 +84,14 @@ def add_url(url, catalog="index", l=1, b=0):
 
 def parse_url(url, domain=None):
     if domain is not None:
-        url = ensure_domain(url=url, domain=domain)
+        url = urls.ensure_domain(url=url, domain=domain)
 
-    href_parse = urlparse(url)
+    name = urls.get_name_by_domain(url=url)
 
-    name = href_parse.netloc.split(".")
-
-    if name[-2] == "google":
-        name = "_".join(name[:-1][::-1])
-    else:
-        name = name[-2]
     item = {}
     item["name"] = name
     item["url"] = url
-    item["img"] = get_url_icon(url=url)
+    item["img"] = urls.get_url_icon(url=url)
     return item
 
 def ensure_catalogs_folder():
