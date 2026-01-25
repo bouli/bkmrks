@@ -1,6 +1,35 @@
 import os
 
 import markdown
+from bkmrks import bkmrks, md
+
+def render():
+    bkmrks.ensure_catalogs_folder()
+    ensure_public_folder()
+
+    bookmarks = os.listdir(bkmrks.catalogs_folder())
+    menu = []
+    htmls = []
+    for catalog in bookmarks:
+        md_file_name = "public/" + catalog
+        md.generate(md_file_name=md_file_name, catalog=catalog)
+        htmls.append(generate_html(md_file_name))
+        menu.append(
+            get_file_and_set_variable(
+                file="templates/menu_item.html",
+                variable="menu_item",
+                content=catalog.split(".")[0],
+            )
+        )
+    menu = " | ".join(menu)
+    for html in htmls:
+        html_content = get_file_and_set_variable(
+            file=html,
+            variable="menu",
+            content=menu,
+        )
+        with open(html, "+w") as f:
+            f.write(html_content)
 
 
 def generate_html(md_file="public/index", template="index"):

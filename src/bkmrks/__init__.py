@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from bkmrks import bkmrks, md, presenter
+from bkmrks import bkmrks, presenter
 
 
 def main():
@@ -31,40 +31,13 @@ def main():
 
     args = parser.parse_args()
     if args.command == "render":
-        render()
+        presenter.render()
 
     if args.command == "load":
         bkmrks.html2catalog(html_file_name=args.html, catalog=args.catalog)
     return
 
 
-def render():
-    bkmrks.ensure_catalogs_folder()
-    presenter.ensure_public_folder()
-
-    bookmarks = os.listdir(bkmrks.catalogs_folder())
-    menu = []
-    htmls = []
-    for catalog in bookmarks:
-        md_file_name = "public/" + catalog
-        md.generate(md_file_name=md_file_name, catalog=catalog)
-        htmls.append(presenter.generate_html(md_file_name))
-        menu.append(
-            presenter.get_file_and_set_variable(
-                file="templates/menu_item.html",
-                variable="menu_item",
-                content=catalog.split(".")[0],
-            )
-        )
-    menu = " | ".join(menu)
-    for html in htmls:
-        html_content = presenter.get_file_and_set_variable(
-            file=html,
-            variable="menu",
-            content=menu,
-        )
-        with open(html, "+w") as f:
-            f.write(html_content)
 
 
 if __name__ == "__main__":
