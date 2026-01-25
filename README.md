@@ -1,4 +1,4 @@
-# 🔖 Bkmrks v0.1.2
+# 🔖 Bkmrks v0.1.3
 
 🔖 Bkmrks helps you to manage your bookmarks.
 
