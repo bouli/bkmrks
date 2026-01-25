@@ -27,7 +27,61 @@ def main():
     load_parser.add_argument(
         "-catalog",
         help="Bookmark catalog name.",
+        default="index",
     )
+
+    add_parser = subparsers.add_parser(
+        "add",
+        help="✍️  Add a bookmark to catalog.",
+    )
+
+    add_parser.add_argument(
+        "url",
+        help="URL bookrmark to add to the catalog.",
+    )
+
+    add_parser.add_argument(
+        "-catalog",
+        help="Bookmark catalog name.",
+        default="index",
+    )
+
+    add_parser.add_argument(
+        "-l",
+        help="Line of the catalog to add your bookmark.",
+        default="1",
+    )
+
+    add_parser.add_argument(
+        "-pos",
+        help="Position in the line of the catalog to add your bookmark.",
+        default="0",
+    )
+
+    rm_parser = subparsers.add_parser(
+        "rm",
+        help="❌ Remove a bookmark from catalog.",
+    )
+
+    rm_parser.add_argument(
+        "-catalog",
+        help="Bookmark catalog name.",
+        default="index",
+    )
+
+    rm_parser.add_argument(
+        "-l",
+        help="Line of the catalog to add your bookmark.",
+        default="1",
+    )
+
+    rm_parser.add_argument(
+        "-pos",
+        help="Position in the line of the catalog to add your bookmark.",
+        default="1",
+    )
+
+
 
     args = parser.parse_args()
     if args.command == "render":
@@ -35,6 +89,12 @@ def main():
 
     if args.command == "load":
         bkmrks.html2catalog(html_file_name=args.html, catalog=args.catalog)
+
+    if args.command == "add":
+        bkmrks.add_url(url=str(args.url), catalog=str(args.catalog), l=int(args.l), b=int(args.pos))
+
+    if args.command == "rm":
+        bkmrks.remove_url(catalog=str(args.catalog), l=int(args.l), b=int(args.pos))
     return
 
 
