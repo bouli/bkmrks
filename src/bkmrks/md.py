@@ -1,8 +1,8 @@
 from bkmrks import bkmrks
 
 
-def generate(md_file_name="public/index", yaml_file_name="index"):
-    bookmarks = bkmrks.get(file_name=yaml_file_name)
+def generate(md_file_name="public/index", catalog="index"):
+    bookmarks = bkmrks.get(catalog=catalog)
     md_file_content = ""
     if len(bookmarks) > 0:
         for line in bookmarks.values():

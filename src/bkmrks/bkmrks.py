@@ -7,24 +7,26 @@ from bs4 import BeautifulSoup
 
 from bkmrks.urls import ensure_domain, get_url_icon
 
+def catalogs_folder():
+    return "catalogs"
 
-def get(file_name="index"):
-    ensure_bookmarks_folder()
-    file_name = file_name.split(".")[0] + ".yaml"
-    with open(f"bookmarks/{file_name}", "r") as f:
+def get(catalog="index"):
+    ensure_catalogs_folder()
+    catalog = catalog.split(".")[0] + ".yaml"
+    with open(f"{catalogs_folder()}/{catalog}", "r") as f:
         return yaml.safe_load(f.read())
 
 
-def set_yaml(data, file_name="index"):
-    ensure_bookmarks_folder()
-    file_name = file_name.split(".")[0] + ".yaml"
-    with open(f"bookmarks/{file_name}", "+w") as f:
+def set(data, catalog="index"):
+    ensure_catalogs_folder()
+    catalog = catalog.split(".")[0] + ".yaml"
+    with open(f"{catalogs_folder()}/{catalog}", "+w") as f:
         yaml.dump(data, f)
         f.seek(0)
-    return get(file_name=file_name)
+    return get(catalog=catalog)
 
 
-def html2yaml(html_file_name, yaml_file_name):
+def html2catalog(html_file_name, catalog):
     if str(html_file_name).startswith("https://"):
         html = requests.get(html_file_name).text
         url_parse = urlparse(html_file_name)
@@ -41,13 +43,13 @@ def html2yaml(html_file_name, yaml_file_name):
 
     l = 0
     b = 1
-    yaml_data = {}
+    catalog_data = {}
 
     for item in a:
         if len(item.attrs) == 0 or l == 0:
             l += 1
             b = 0
-            yaml_data[f"l{l}"] = {}
+            catalog_data[f"l{l}"] = {}
         elif item.has_attr("href") and not item["href"].startswith("#"):
             b += 1
 
@@ -74,9 +76,13 @@ def html2yaml(html_file_name, yaml_file_name):
             item["url"] = url
             item["img"] = img
 
-            yaml_data[f"l{l}"][f"b{b}"] = item.copy()
+            catalog_data[f"l{l}"][f"b{b}"] = item.copy()
 
-    set_yaml(data=yaml_data, file_name=yaml_file_name)
+    set(data=catalog_data, catalog=catalog)
+
+def add_url(url, catalog="index", l=1, b=0):
+
+    return
 
 def parse_url(url, domain=None):
     if domain is not None:
@@ -96,16 +102,16 @@ def parse_url(url, domain=None):
     item["img"] = get_url_icon(url=url)
     return item
 
-def ensure_bookmarks_folder():
-    if not os.path.exists("bookmarks"):
-        os.mkdir("bookmarks")
+def ensure_catalogs_folder():
+    if not os.path.exists("catalogs"):
+        os.mkdir("catalogs")
         data = {
             "l1": {
                 "b1": {
-                    "name": "bkmrks_page",
+                    "name": "bkmrks_sample_page",
                     "img": "https://cesarcardoso.cc/README/1_bouli.png",
                     "url": "https://github.com/bouli/bkmrks",
                 }
             }
         }
-        set_yaml(data=data)
+        set(data=data)
