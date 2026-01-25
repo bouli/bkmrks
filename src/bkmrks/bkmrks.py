@@ -14,7 +14,11 @@ def get(catalog="index"):
     ensure_catalogs_folder()
     catalog = catalog.split(".")[0] + ".yaml"
     with open(f"{catalogs_folder()}/{catalog}", "r") as f:
-        return yaml.safe_load(f.read())
+        catalog_data = yaml.safe_load(f.read())
+        if catalog_data is None:
+            return {}
+        else:
+            return catalog_data
 
 
 def set(data, catalog="index"):

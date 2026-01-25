@@ -11,12 +11,12 @@ def main():
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
     render_parser = subparsers.add_parser(
         "render",
-        help="✍️ Render your html bookmarks to public folder.",
+        help="✍️  Render your html bookmarks to public folder.",
     )
 
     load_parser = subparsers.add_parser(
         "load",
-        help="✍️ Load and HTML file/url and create a bookmark page.",
+        help="📚 Load and HTML file/url and create a bookmark page.",
     )
 
     load_parser.add_argument(
