@@ -1,6 +1,6 @@
 # 🔖 Bkmrks v0.1.0
 
-🔖 Bkmrks helps you manage your bookmarks.
+🔖 Bkmrks helps you to manage your bookmarks.
 
 ## Installation
 
