@@ -49,9 +49,10 @@ def html2yaml(html_file_name, yaml_file_name):
             b = 0
             yaml_data[f"l{l}"] = {}
         elif item.has_attr("href") and not item["href"].startswith("#"):
+            b += 1
+
             item["href"] = ensure_domain(url=item["href"], domain=domain)
 
-            b += 1
             href_parse = urlparse(item["href"])
             has_img = False
             if len(item.find_all("img")) > 0:
@@ -77,6 +78,23 @@ def html2yaml(html_file_name, yaml_file_name):
 
     set_yaml(data=yaml_data, file_name=yaml_file_name)
 
+def parse_url(url, domain=None):
+    if domain is not None:
+        url = ensure_domain(url=url, domain=domain)
+
+    href_parse = urlparse(url)
+
+    name = href_parse.netloc.split(".")
+
+    if name[-2] == "google":
+        name = "_".join(name[:-1][::-1])
+    else:
+        name = name[-2]
+    item = {}
+    item["name"] = name
+    item["url"] = url
+    item["img"] = get_url_icon(url=url)
+    return item
 
 def ensure_bookmarks_folder():
     if not os.path.exists("bookmarks"):
