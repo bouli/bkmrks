@@ -33,7 +33,7 @@ def main():
     if args.command == "render":
         render()
 
-    if args.command == "render":
+    if args.command == "load":
         bkmrks.html2yaml(html_file_name=args.html, yaml_file_name=args.catalog)
     return
 
