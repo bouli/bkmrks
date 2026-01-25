@@ -72,8 +72,10 @@ def get_url_icon(url):
         img = separator.join([domain, img])
     return img
 
+
 def get_default_img(text):
     return f"https://ui-avatars.com/api/?name={text}"
+
 
 def get_name_by_domain(url):
     href_parse = urlparse(url)

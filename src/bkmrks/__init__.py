@@ -6,7 +6,7 @@ from bkmrks import bkmrks, presenter
 
 def main():
     parser = argparse.ArgumentParser(prog="bkmrks")
-    parser.add_argument("--version", action="version", version="%(prog)s v0.1.3")
+    parser.add_argument("--version", action="version", version="%(prog)s v0.2.0")
 
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
     render_parser = subparsers.add_parser(
@@ -130,15 +130,22 @@ def main():
         bkmrks.html2catalog(html_file_name=args.html, catalog=args.catalog)
 
     if args.command == "add":
-        bkmrks.add_url(url=str(args.url), catalog=str(args.catalog), l=int(args.l), b=int(args.pos))
+        bkmrks.add_url(
+            url=str(args.url), catalog=str(args.catalog), l=int(args.l), b=int(args.pos)
+        )
 
     if args.command == "rm":
         bkmrks.remove_url(catalog=str(args.catalog), l=int(args.l), b=int(args.pos))
     if args.command == "mv":
-        bkmrks.mv_url(from_catalog =args.f_catalog, from_l=args.f_l, from_b=args.f_pos,to_catalog =args.to_catalog, to_l=args.to_l, to_b=args.to_pos,)
+        bkmrks.mv_url(
+            from_catalog=args.f_catalog,
+            from_l=args.f_l,
+            from_b=args.f_pos,
+            to_catalog=args.to_catalog,
+            to_l=args.to_l,
+            to_b=args.to_pos,
+        )
     return
-
-
 
 
 if __name__ == "__main__":

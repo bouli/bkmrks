@@ -1,7 +1,9 @@
 import os
 
 import markdown
+
 from bkmrks import bkmrks, md
+
 
 def render():
     bkmrks.ensure_catalogs_folder()
