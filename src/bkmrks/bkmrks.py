@@ -100,15 +100,14 @@ def edit_bookmark(url, catalog="index", l=1, b=0, action='add'):
         return
     if len(catalog_data)<l and action=='add':
         catalog_data_new = catalog_data.copy()
+
         l_name = get_l_name(l=len(catalog_data)+1)
-        catalog_data_new[l_name] = {}
         b_name = get_b_name(b=1)
+
+        catalog_data_new[l_name] = {}
         catalog_data_new[l_name][b_name] = {}
     else:
-        if l < 1:
-            l = 1
-        if b < 1:
-            b = 1
+        l,b = at_least_1(l,b)
         i = 0
         for catalog_l_name, catalog_l in catalog_data.items():
             i+=1
@@ -143,10 +142,7 @@ def edit_bookmark(url, catalog="index", l=1, b=0, action='add'):
 
 def get_url(catalog="index", l=1, b=1,):
     url = None
-    if l < 1:
-        l = 1
-    if b < 1:
-        b = 1
+    l,b = at_least_1(l,b)
     catalog_data = get(catalog=catalog)
     if len(catalog_data) == 0:
         return
@@ -179,8 +175,8 @@ def parse_url(url, domain=None):
     return item
 
 def ensure_catalogs_folder():
-    if not os.path.exists("catalogs"):
-        os.mkdir("catalogs")
+    if not os.path.exists(catalogs_folder()):
+        os.mkdir(catalogs_folder())
         data = {
             "l1": {
                 "b1": {
@@ -191,3 +187,11 @@ def ensure_catalogs_folder():
             }
         }
         set(data=data)
+
+def at_least_1(l,b):
+    if l < 1:
+        l = 1
+    if b < 1:
+        b = 1
+
+    return l, b
