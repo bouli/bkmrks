@@ -10,6 +10,8 @@ def generate(md_file_name="public/index", catalog="index"):
                 for item in line.values():
                     md_file_content += md_a_img(item)
             md_file_content += md_hr()
+    if len(md_file_content) < 10:
+        return None
 
     md_file_name = md_file_name.split(".")[0] + ".md"
     with open(md_file_name, "+w") as f:

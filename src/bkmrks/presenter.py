@@ -12,15 +12,16 @@ def render():
     htmls = []
     for catalog in bookmarks:
         md_file_name = "public/" + catalog
-        md.generate(md_file_name=md_file_name, catalog=catalog)
-        htmls.append(generate_html(md_file_name))
-        menu.append(
-            get_file_and_set_variable(
-                file="templates/menu_item.html",
-                variable="menu_item",
-                content=catalog.split(".")[0],
+        md_generated_file = md.generate(md_file_name=md_file_name, catalog=catalog)
+        if md_generated_file is not None:
+            htmls.append(generate_html(md_file_name))
+            menu.append(
+                get_file_and_set_variable(
+                    file="templates/menu_item.html",
+                    variable="menu_item",
+                    content=catalog.split(".")[0],
+                )
             )
-        )
     menu = " | ".join(menu)
     for html in htmls:
         html_content = get_file_and_set_variable(
