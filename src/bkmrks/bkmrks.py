@@ -85,6 +85,14 @@ def html2catalog(html_file_name, catalog):
 
     set(data=catalog_data, catalog=catalog)
 
+def mv_url(from_catalog ="index", from_l=1, from_b=0,to_catalog ="index", to_l=1, to_b=0,):
+    url = get_url(catalog=from_catalog, l=from_l, b=from_b,)
+    if url is None:
+        return
+    add_url(url=url, catalog=to_catalog, l=to_l, b=to_b,)
+    remove_url(catalog=from_catalog, l=from_l, b=from_b,)
+    return True
+
 def add_url(url, catalog="index", l=1, b=0):
     return edit_bookmark(url=url, catalog=catalog, l=l, b=b, action='add')
 

@@ -71,17 +71,56 @@ def main():
 
     rm_parser.add_argument(
         "-l",
-        help="Line of the catalog to add your bookmark.",
+        help="Line of the catalog to remove your bookmark.",
         default="1",
     )
 
     rm_parser.add_argument(
         "-pos",
-        help="Position in the line of the catalog to add your bookmark.",
+        help="Position in the line of the catalog to remove your bookmark.",
         default="1",
     )
 
+    mv_parser = subparsers.add_parser(
+        "mv",
+        help="🔄 Move a bookmark from a catalog to another.",
+    )
 
+    mv_parser.add_argument(
+        "-f_catalog",
+        help="Bookmark catalog name to move from.",
+        default="index",
+    )
+
+    mv_parser.add_argument(
+        "-f_l",
+        help="Line of the catalog to move from.",
+        default="1",
+    )
+
+    mv_parser.add_argument(
+        "-f_pos",
+        help="Position in the line of the catalog to move from.",
+        default="1",
+    )
+
+    mv_parser.add_argument(
+        "-t_catalog",
+        help="Bookmark catalog name to move to.",
+        default="index",
+    )
+
+    mv_parser.add_argument(
+        "-t_l",
+        help="Line of the catalog to move to.",
+        default="1",
+    )
+
+    mv_parser.add_argument(
+        "-t_pos",
+        help="Position in the line of the catalog to move to.",
+        default="1",
+    )
 
     args = parser.parse_args()
     if args.command == "render":
@@ -95,6 +134,8 @@ def main():
 
     if args.command == "rm":
         bkmrks.remove_url(catalog=str(args.catalog), l=int(args.l), b=int(args.pos))
+    if args.command == "mv":
+        bkmrks.mv_url(from_catalog =args.f_catalog, from_l=args.f_l, from_b=args.f_pos,to_catalog =args.to_catalog, to_l=args.to_l, to_b=args.to_pos,)
     return
 
 
