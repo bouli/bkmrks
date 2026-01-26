@@ -1,7 +1,5 @@
 import os
-from urllib.parse import urlparse
 
-import requests
 import yaml
 from bs4 import BeautifulSoup
 
@@ -41,44 +39,27 @@ def html2catalog(html_file_name, catalog):
     html = urls.read_from_url_or_path(url_path=html_file_name)
 
     soup = BeautifulSoup(html, features="html.parser")
-    soup_hr_a_tags = soup.find_all(["hr", "a"])
+    soup_all_hr_a_tags = soup.find_all(["hr", "a"])
 
-    line_index = 0
+    line_index = 1
     item_index = 1
     catalog_data = {}
+    line_name = get_line_name(line_index=line_index)
+    catalog_data[line_name] = {}
 
-    for soup_item in soup_hr_a_tags:
-        if len(soup_item.attrs) == 0 or line_index == 0:
-            line_index += 1
-            line_name = get_line_name(line_index=line_index)
+    for soup_item in soup_all_hr_a_tags:
+        if soup_item.has_attr("href") and not soup_item["href"].startswith("#"):
 
-            item_index = 0
-
-            catalog_data[line_name] = {}
-        elif soup_item.has_attr("href") and not soup_item["href"].startswith("#"):
-            item_index += 1
-            item_name = get_item_name(item_index=item_index)
-
-            soup_item["href"] = urls.ensure_domain(url=soup_item["href"], domain=domain)
-
-            use_soup_img = False
-            if len(soup_item.find_all("img")) > 0:
-                if len(soup_item.find("img")["src"]) < 200:
-                    use_soup_img = False
-                else:
-                    use_soup_img = True
-
-            if use_soup_img:
-                img = soup_item.find("img")["src"]
-            else:
-                img = urls.get_url_icon(soup_item["href"])
-
-            url = soup_item["href"]
+            img = urls.get_img_from_a_soup_item(soup_item=soup_item, domain=domain)
+            url = urls.ensure_domain(url=soup_item["href"], domain=domain)
             name = urls.get_name_by_url(url=url)
 
             bookmark_item = get_bookmark_item(url=url,name=name,img=img)
 
+            item_name = get_item_name(item_index=item_index)
             catalog_data[line_name][item_name] = bookmark_item.copy()
+
+            item_index += 1
 
     set(data=catalog_data, catalog=catalog)
 

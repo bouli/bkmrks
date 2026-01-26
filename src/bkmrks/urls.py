@@ -104,3 +104,19 @@ def read_from_url_or_path(url_path):
         with open(url_path, "r") as f:
             content = f.read()
     return content
+
+def get_img_from_a_soup_item(soup_item, domain):
+    soup_item["href"] = ensure_domain(url=soup_item["href"], domain=domain)
+
+    use_soup_img = False
+    if len(soup_item.find_all("img")) > 0:
+        if len(soup_item.find("img")["src"]) < 200:
+            use_soup_img = False
+        else:
+            use_soup_img = True
+
+    if use_soup_img:
+        img = soup_item.find("img")["src"]
+    else:
+        img = get_url_icon(soup_item["href"])
+    return img
