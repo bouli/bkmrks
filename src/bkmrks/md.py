@@ -27,7 +27,7 @@ def md_a_img(item):
     if "name" in item:
         name = item["name"]
     else:
-        name = urls.get_name_by_domain(url=url)
+        name = urls.get_name_by_url(url=url)
 
     if "img" in item:
         img = item["img"]

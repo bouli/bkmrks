@@ -77,7 +77,7 @@ def get_default_img(text):
     return f"https://ui-avatars.com/api/?name={text}"
 
 
-def get_name_by_domain(url):
+def get_name_by_url(url):
     href_parse = urlparse(url)
     name = href_parse.netloc.split(".")
 
@@ -86,3 +86,21 @@ def get_name_by_domain(url):
     else:
         name = name[-2]
     return name
+
+def extract_domain_from_url(url):
+    domain = ""
+
+    url_parse = urlparse(url)
+    if len(url_parse.netloc)>0:
+        domain = "://".join([url_parse.scheme, url_parse.netloc])
+    return domain
+
+def read_from_url_or_path(url_path):
+    if str(url_path).startswith("https://"):
+        content = requests.get(url_path).text
+
+    else:
+        url_path = url_path.split(".")[0] + ".html"
+        with open(url_path, "r") as f:
+            content = f.read()
+    return content

@@ -37,141 +37,137 @@ def set(data, catalog="index"):
 
 
 def html2catalog(html_file_name, catalog):
-    if str(html_file_name).startswith("https://"):
-        html = requests.get(html_file_name).text
-        url_parse = urlparse(html_file_name)
-        domain = "://".join([url_parse.scheme, url_parse.netloc])
+    domain = urls.extract_domain_from_url(url=html_file_name)
+    html = urls.read_from_url_or_path(url_path=html_file_name)
 
-    else:
-        domain = ""
-        html_file_name = html_file_name.split(".")[0] + ".html"
-        with open(html_file_name, "r") as f:
-            html = f.read()
+    soup = BeautifulSoup(html, features="html.parser")
+    soup_hr_a_tags = soup.find_all(["hr", "a"])
 
-    r = BeautifulSoup(html, features="html.parser")
-    a = r.find_all(["hr", "a"])
-
-    l = 0
-    b = 1
+    line_index = 0
+    item_index = 1
     catalog_data = {}
 
-    for item in a:
-        if len(item.attrs) == 0 or l == 0:
-            l += 1
-            b = 0
-            l_name = f"l{l:04d}"
+    for soup_item in soup_hr_a_tags:
+        if len(soup_item.attrs) == 0 or line_index == 0:
+            line_index += 1
+            line_name = get_line_name(line_index=line_index)
 
-            catalog_data[l_name] = {}
-        elif item.has_attr("href") and not item["href"].startswith("#"):
-            b += 1
-            b_name = f"b{b:04d}"
+            item_index = 0
 
-            item["href"] = urls.ensure_domain(url=item["href"], domain=domain)
+            catalog_data[line_name] = {}
+        elif soup_item.has_attr("href") and not soup_item["href"].startswith("#"):
+            item_index += 1
+            item_name = get_item_name(item_index=item_index)
 
-            has_img = False
-            if len(item.find_all("img")) > 0:
-                if len(item.find("img")["src"]) < 200:
-                    has_img = False
-            if has_img:
-                img = item.find("img")["src"]
+            soup_item["href"] = urls.ensure_domain(url=soup_item["href"], domain=domain)
+
+            use_soup_img = False
+            if len(soup_item.find_all("img")) > 0:
+                if len(soup_item.find("img")["src"]) < 200:
+                    use_soup_img = False
+                else:
+                    use_soup_img = True
+
+            if use_soup_img:
+                img = soup_item.find("img")["src"]
             else:
-                img = urls.get_url_icon(item["href"])
-            url = item["href"]
-            name = urls.get_name_by_domain(url=url)
-            item = {}
-            item["name"] = name
-            item["url"] = url
-            item["img"] = img
+                img = urls.get_url_icon(soup_item["href"])
 
-            catalog_data[l_name][b_name] = item.copy()
+            url = soup_item["href"]
+            name = urls.get_name_by_url(url=url)
+
+            bookmark_item = get_bookmark_item(url=url,name=name,img=img)
+
+            catalog_data[line_name][item_name] = bookmark_item.copy()
 
     set(data=catalog_data, catalog=catalog)
 
 
 def mv_url(
     from_catalog="index",
-    from_l=1,
-    from_b=0,
+    from_line_index=1,
+    from_item_index=0,
     to_catalog="index",
-    to_l=1,
-    to_b=0,
+    to_line_index=1,
+    to_item_index=0,
 ):
     url = get_url(
         catalog=from_catalog,
-        l=from_l,
-        b=from_b,
+        line_index=from_line_index,
+        item_index=from_item_index,
     )
     if url is None:
         return
     add_url(
         url=url,
         catalog=to_catalog,
-        l=to_l,
-        b=to_b,
+        line_index=to_line_index,
+        item_index=to_item_index,
     )
     remove_url(
         catalog=from_catalog,
-        l=from_l,
-        b=from_b,
+        line_index=from_line_index,
+        item_index=from_item_index,
     )
     return True
 
 
-def add_url(url, catalog="index", l=1, b=0):
-    return edit_bookmark(url=url, catalog=catalog, l=l, b=b, action="add")
+def add_url(url, catalog="index", line_index=1, item_index=0):
+    return edit_bookmark(url=url, catalog=catalog, l=line_index, b=item_index, action="add")
 
 
-def remove_url(catalog="index", l=1, b=0):
-    return edit_bookmark(url="", catalog=catalog, l=l, b=b, action="rm")
+def remove_url(catalog="index", line_index=1, item_index=0):
+    return edit_bookmark(url="", catalog=catalog, l=line_index, b=item_index, action="rm")
 
 
-def edit_bookmark(url, catalog="index", l=1, b=0, action="add"):
+def edit_bookmark(url, catalog="index", line_index=1, item_index=0, action="add"):
     catalog_data = get(catalog=catalog)
     catalog_data_new = {}
-    l_name = None
-    b_name = None
+    line_name = None
+    item_name = None
     if action == "rm" and catalog_data == {}:
         return
-    if len(catalog_data) < l and action == "add":
+    if len(catalog_data) < line_index and action == "add":
         catalog_data_new = catalog_data.copy()
 
-        l_name = get_l_name(l=len(catalog_data) + 1)
-        b_name = get_b_name(b=1)
+        line_name = get_line_name(line_index=len(catalog_data) + 1)
+        item_name = get_item_name(item_index=1)
 
-        catalog_data_new[l_name] = {}
-        catalog_data_new[l_name][b_name] = {}
+        catalog_data_new[line_name] = {}
+        catalog_data_new[line_name][item_name] = {}
     else:
-        l, b = at_least_1(l, b)
+        line_index = at_least_1(line_index)
+        item_index = at_least_1(item_index)
         i = 0
-        for catalog_l_name, catalog_l in catalog_data.items():
+        for catalog_line_name, catalog_line in catalog_data.items():
             i += 1
-            if len(catalog_l_name) < 4:
-                catalog_l_name = get_l_name(l=i)
-            if l == i:
-                l_name = catalog_l_name
-                catalog_data_new[catalog_l_name] = {}
+            if len(catalog_line_name) < 8:
+                catalog_line_name = get_line_name(line_index=i)
+            if line_index == i:
+                line_name = catalog_line_name
+                catalog_data_new[catalog_line_name] = {}
                 j = 0
-                for catalog_l_b in catalog_l.values():
+                for catalog_line_item in catalog_line.values():
                     j += 1
-                    if b == j and action == "add":
-                        catalog_data_new[catalog_l_name][get_b_name(b=j)] = {}
-                        b_name = get_b_name(b=j)
+                    if item_index == j and action == "add":
+                        catalog_data_new[catalog_line_name][get_item_name(item_index=j)] = {}
+                        item_name = get_item_name(item_index=j)
                         j += 1
-                    if b == j and action == "rm":
+                    if item_index == j and action == "rm":
                         print("")
                     else:
-                        catalog_data_new[catalog_l_name][get_b_name(b=j)] = (
-                            catalog_l_b.copy()
+                        catalog_data_new[catalog_line_name][get_item_name(item_index=j)] = (
+                            catalog_line_item.copy()
                         )
                     print(j)
-                if b_name is None and action == "add":
+                if item_name is None and action == "add":
                     j += 1
-                    catalog_data_new[catalog_l_name][get_b_name(b=j)] = {}
-                    b_name = get_b_name(b=j)
+                    catalog_data_new[catalog_line_name][get_item_name(item_index=j)] = {}
+                    item_name = get_item_name(item_index=j)
             else:
-                catalog_data_new[catalog_l_name] = catalog_l.copy()
+                catalog_data_new[catalog_line_name] = catalog_line.copy()
     if action != "rm":
-        catalog_data_new[l_name][b_name] = parse_url(url=url)
+        catalog_data_new[line_name][item_name] = parse_url(url=url)
 
     set(data=catalog_data_new, catalog=catalog)
     return True
@@ -179,65 +175,68 @@ def edit_bookmark(url, catalog="index", l=1, b=0, action="add"):
 
 def get_url(
     catalog="index",
-    l=1,
-    b=1,
+    line_index=1,
+    item_index=1,
 ):
     url = None
-    l, b = at_least_1(l, b)
+    line_index = at_least_1(line_index)
+    item_index = at_least_1(item_index)
+
     catalog_data = get(catalog=catalog)
     if len(catalog_data) == 0:
         return
-    if len(list(catalog_data.values())) >= l:
-        line = list(catalog_data.values())[l - 1]
-        if len(list(line.values())) >= b:
-            if "url" in list(line.values())[b - 1]:
-                url = list(line.values())[b - 1]["url"]
+    if len(list(catalog_data.values())) >= line_index:
+        catalog_line = list(catalog_data.values())[line_index - 1]
+        if len(list(catalog_line.values())) >= item_index:
+            if "url" in list(catalog_line.values())[item_index - 1]:
+                url = list(catalog_line.values())[item_index - 1]["url"]
 
     return url
 
 
-def get_l_name(l):
-    l_name = f"l{l:04d}"
-    return l_name
+def get_line_name(line_index):
+    line_name = f"line{line_index:04d}"
+    return line_name
 
 
-def get_b_name(b):
-    b_name = f"b{b:04d}"
-    return b_name
+def get_item_name(item_index):
+    item_name = f"item{item_index:04d}"
+    return item_name
 
 
 def parse_url(url, domain=None):
     if domain is not None:
         url = urls.ensure_domain(url=url, domain=domain)
 
-    name = urls.get_name_by_domain(url=url)
+    name = urls.get_name_by_url(url=url)
 
-    item = {}
-    item["name"] = name
-    item["url"] = url
-    item["img"] = urls.get_url_icon(url=url)
-    return item
+    bookmark_item["img"] = urls.get_url_icon(url=url)
+    bookmark_item = get_bookmark_item(url=url, name=name, img=urls.get_url_icon(url=url))
+    return bookmark_item
 
+def get_bookmark_item(url, name, img):
+    bookmark_item = {}
+    bookmark_item["name"] = name
+    bookmark_item["url"] = url
+    bookmark_item["img"] = img
+
+    return bookmark_item
 
 def ensure_catalogs_folder():
     if not os.path.exists(catalogs_folder()):
         os.mkdir(catalogs_folder())
         data = {
-            "l1": {
-                "b1": {
-                    "name": "bkmrks_sample_page",
-                    "img": "https://cesarcardoso.cc/README/1_bouli.png",
-                    "url": "https://github.com/bouli/bkmrks",
-                }
+            get_line_name(line_index=1): {
+                get_item_name(item_index=1):
+                    get_bookmark_item(url="https://github.com/bouli/bkmrks", name="bkmrks_sample_page", img="https://cesarcardoso.cc/README/1_bouli.png")
             }
         }
         set(data=data)
 
 
-def at_least_1(l, b):
-    if l < 1:
-        l = 1
-    if b < 1:
-        b = 1
+def at_least_1(number):
+    number = int(number)
+    if number < 1:
+        number = 1
 
-    return l, b
+    return number

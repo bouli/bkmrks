@@ -131,19 +131,20 @@ def main():
 
     if args.command == "add":
         bkmrks.add_url(
-            url=str(args.url), catalog=str(args.catalog), l=int(args.l), b=int(args.pos)
+            url=str(args.url), catalog=str(args.catalog), line_index=int(args.l), item_index=int(args.pos)
         )
 
     if args.command == "rm":
-        bkmrks.remove_url(catalog=str(args.catalog), l=int(args.l), b=int(args.pos))
+        bkmrks.remove_url(catalog=str(args.catalog), line_index=int(args.l), item_index=int(args.pos))
+
     if args.command == "mv":
         bkmrks.mv_url(
             from_catalog=args.f_catalog,
-            from_l=args.f_l,
-            from_b=args.f_pos,
+            from_line_index=args.f_l,
+            from_item_index=args.f_pos,
             to_catalog=args.to_catalog,
-            to_l=args.to_l,
-            to_b=args.to_pos,
+            to_line_index=args.to_l,
+            to_item_index=args.to_pos,
         )
     return
 
