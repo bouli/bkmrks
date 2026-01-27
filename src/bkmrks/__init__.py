@@ -11,7 +11,7 @@ def main():
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
     render_parser = subparsers.add_parser(
         "render",
-        help="✍️  Render your html bookmarks to public folder.",
+        help="✍️   Render your html bookmarks to public folder.",
     )
 
     load_parser = subparsers.add_parser(
@@ -32,7 +32,7 @@ def main():
 
     add_parser = subparsers.add_parser(
         "add",
-        help="✍️  Add a bookmark to catalog.",
+        help="✍️   Add a bookmark to catalog.",
     )
 
     add_parser.add_argument(

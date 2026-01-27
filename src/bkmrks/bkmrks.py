@@ -94,11 +94,11 @@ def mv_url(
 
 
 def add_url(url, catalog="index", line_index=1, item_index=0):
-    return edit_bookmark(url=url, catalog=catalog, l=line_index, b=item_index, action="add")
+    return edit_bookmark(url=url, catalog=catalog, line_index=line_index, item_index=item_index, action="add")
 
 
 def remove_url(catalog="index", line_index=1, item_index=0):
-    return edit_bookmark(url="", catalog=catalog, l=line_index, b=item_index, action="rm")
+    return edit_bookmark(url="", catalog=catalog, line_index=line_index, item_index=item_index, action="rm")
 
 
 def edit_bookmark(url, catalog="index", line_index=1, item_index=0, action="add"):
