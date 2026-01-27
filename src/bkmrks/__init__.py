@@ -128,6 +128,7 @@ def main():
 
     if args.command == "load":
         bkmrks.html2catalog(html_file_name=args.html, catalog=args.catalog)
+        presenter.render()
 
     if args.command == "add":
         bkmrks.add_url(
@@ -136,11 +137,13 @@ def main():
             line_index=int(args.l),
             item_index=int(args.pos),
         )
+        presenter.render()
 
     if args.command == "rm":
         bkmrks.remove_url(
             catalog=str(args.catalog), line_index=int(args.l), item_index=int(args.pos)
         )
+        presenter.render()
 
     if args.command == "mv":
         bkmrks.mv_url(
@@ -151,6 +154,7 @@ def main():
             to_line_index=args.to_l,
             to_item_index=args.to_pos,
         )
+        presenter.render()
     return
 
 

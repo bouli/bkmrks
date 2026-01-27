@@ -154,7 +154,6 @@ def edit_bookmark(url, catalog="index", line_index=1, item_index=0, action="add"
                         catalog_data_new[catalog_line_name][
                             get_item_name(item_index=j)
                         ] = catalog_line_item.copy()
-                    print(j)
                 if item_name is None and action == "add":
                     j += 1
                     catalog_data_new[catalog_line_name][get_item_name(item_index=j)] = (
