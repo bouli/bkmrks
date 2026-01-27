@@ -6,7 +6,7 @@ from bkmrks import bkmrks, presenter
 
 def main():
     parser = argparse.ArgumentParser(prog="bkmrks")
-    parser.add_argument("--version", action="version", version="%(prog)s v0.2.0")
+    parser.add_argument("--version", action="version", version="%(prog)s v0.2.1")
 
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
     render_parser = subparsers.add_parser(
@@ -131,11 +131,16 @@ def main():
 
     if args.command == "add":
         bkmrks.add_url(
-            url=str(args.url), catalog=str(args.catalog), line_index=int(args.l), item_index=int(args.pos)
+            url=str(args.url),
+            catalog=str(args.catalog),
+            line_index=int(args.l),
+            item_index=int(args.pos),
         )
 
     if args.command == "rm":
-        bkmrks.remove_url(catalog=str(args.catalog), line_index=int(args.l), item_index=int(args.pos))
+        bkmrks.remove_url(
+            catalog=str(args.catalog), line_index=int(args.l), item_index=int(args.pos)
+        )
 
     if args.command == "mv":
         bkmrks.mv_url(

@@ -54,7 +54,7 @@ def html2catalog(html_file_name, catalog):
             url = urls.ensure_domain(url=soup_item["href"], domain=domain)
             name = urls.get_name_by_url(url=url)
 
-            bookmark_item = get_bookmark_item(url=url,name=name,img=img)
+            bookmark_item = get_bookmark_item(url=url, name=name, img=img)
 
             item_name = get_item_name(item_index=item_index)
             catalog_data[line_name][item_name] = bookmark_item.copy()
@@ -94,11 +94,23 @@ def mv_url(
 
 
 def add_url(url, catalog="index", line_index=1, item_index=0):
-    return edit_bookmark(url=url, catalog=catalog, line_index=line_index, item_index=item_index, action="add")
+    return edit_bookmark(
+        url=url,
+        catalog=catalog,
+        line_index=line_index,
+        item_index=item_index,
+        action="add",
+    )
 
 
 def remove_url(catalog="index", line_index=1, item_index=0):
-    return edit_bookmark(url="", catalog=catalog, line_index=line_index, item_index=item_index, action="rm")
+    return edit_bookmark(
+        url="",
+        catalog=catalog,
+        line_index=line_index,
+        item_index=item_index,
+        action="rm",
+    )
 
 
 def edit_bookmark(url, catalog="index", line_index=1, item_index=0, action="add"):
@@ -131,19 +143,23 @@ def edit_bookmark(url, catalog="index", line_index=1, item_index=0, action="add"
                 for catalog_line_item in catalog_line.values():
                     j += 1
                     if item_index == j and action == "add":
-                        catalog_data_new[catalog_line_name][get_item_name(item_index=j)] = {}
+                        catalog_data_new[catalog_line_name][
+                            get_item_name(item_index=j)
+                        ] = {}
                         item_name = get_item_name(item_index=j)
                         j += 1
                     if item_index == j and action == "rm":
                         print("")
                     else:
-                        catalog_data_new[catalog_line_name][get_item_name(item_index=j)] = (
-                            catalog_line_item.copy()
-                        )
+                        catalog_data_new[catalog_line_name][
+                            get_item_name(item_index=j)
+                        ] = catalog_line_item.copy()
                     print(j)
                 if item_name is None and action == "add":
                     j += 1
-                    catalog_data_new[catalog_line_name][get_item_name(item_index=j)] = {}
+                    catalog_data_new[catalog_line_name][get_item_name(item_index=j)] = (
+                        {}
+                    )
                     item_name = get_item_name(item_index=j)
             else:
                 catalog_data_new[catalog_line_name] = catalog_line.copy()
@@ -192,8 +208,11 @@ def parse_url(url, domain=None):
     name = urls.get_name_by_url(url=url)
 
     bookmark_item["img"] = urls.get_url_icon(url=url)
-    bookmark_item = get_bookmark_item(url=url, name=name, img=urls.get_url_icon(url=url))
+    bookmark_item = get_bookmark_item(
+        url=url, name=name, img=urls.get_url_icon(url=url)
+    )
     return bookmark_item
+
 
 def get_bookmark_item(url, name, img):
     bookmark_item = {}
@@ -203,13 +222,17 @@ def get_bookmark_item(url, name, img):
 
     return bookmark_item
 
+
 def ensure_catalogs_folder():
     if not os.path.exists(catalogs_folder()):
         os.mkdir(catalogs_folder())
         data = {
             get_line_name(line_index=1): {
-                get_item_name(item_index=1):
-                    get_bookmark_item(url="https://github.com/bouli/bkmrks", name="bkmrks_sample_page", img="https://cesarcardoso.cc/README/1_bouli.png")
+                get_item_name(item_index=1): get_bookmark_item(
+                    url="https://github.com/bouli/bkmrks",
+                    name="bkmrks_sample_page",
+                    img="https://cesarcardoso.cc/README/1_bouli.png",
+                )
             }
         }
         set(data=data)

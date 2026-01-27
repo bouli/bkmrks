@@ -87,13 +87,15 @@ def get_name_by_url(url):
         name = name[-2]
     return name
 
+
 def extract_domain_from_url(url):
     domain = ""
 
     url_parse = urlparse(url)
-    if len(url_parse.netloc)>0:
+    if len(url_parse.netloc) > 0:
         domain = "://".join([url_parse.scheme, url_parse.netloc])
     return domain
+
 
 def read_from_url_or_path(url_path):
     if str(url_path).startswith("https://"):
@@ -104,6 +106,7 @@ def read_from_url_or_path(url_path):
         with open(url_path, "r") as f:
             content = f.read()
     return content
+
 
 def get_img_from_a_soup_item(soup_item, domain):
     soup_item["href"] = ensure_domain(url=soup_item["href"], domain=domain)
