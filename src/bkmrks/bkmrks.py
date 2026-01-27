@@ -207,7 +207,6 @@ def parse_url(url, domain=None):
 
     name = urls.get_name_by_url(url=url)
 
-    bookmark_item["img"] = urls.get_url_icon(url=url)
     bookmark_item = get_bookmark_item(
         url=url, name=name, img=urls.get_url_icon(url=url)
     )
