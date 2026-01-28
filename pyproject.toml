@@ -42,3 +42,8 @@ filename = "README.md"
 
 [[tool.bumpversion.files]]
 filename = "src/bkmrks/__init__.py"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+]
