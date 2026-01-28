@@ -5,11 +5,15 @@ from bs4 import BeautifulSoup
 
 
 def ensure_domain(url, domain):
-    if not url.startswith("https"):
-        if url.startswith("/"):
-            url = domain + url
-        else:
-            url = domain + "/" + url
+    if urlparse(url).netloc == '' and urlparse(domain).netloc == '':
+        raise ValueError("url or domain must be a domain")
+
+    if urlparse(url).netloc == "":
+        parsed_url = urlparse(url)
+        parsed_domain = urlparse(domain)
+        url = parsed_url._replace(scheme="https",netloc=parsed_domain.netloc).geturl()
+
+    url = urlparse(url)._replace(scheme="https").geturl()
     return url
 
 
