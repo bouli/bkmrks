@@ -18,16 +18,53 @@ def ensure_domain(url, domain):
 
 
 def get_url_icon(url):
-    href_parse = urllib.parse.urlparse(url)
-    domain = "://".join([href_parse.scheme, href_parse.netloc])
-    img = domain + "/favicon.ico"
-    try:
-        r = requests.get(url)
-    except:
-        return img
 
-    soup = BeautifulSoup(r.text, features="html.parser")
-    soup_link = soup.find_all(
+    domain = extract_domain_from_url(url=url)
+    if len(domain) == 0:
+        return get_default_img(text=url)
+
+    meta_icon, url_soup = get_meta_icon_from_url(url=url)
+    if meta_icon is not None:
+        return meta_icon
+
+    favicon = get_favicon_from_url(url=url)
+    if favicon is not None:
+        return favicon
+
+    url_first_img = get_first_img_from_url(url=url, url_soup=url_soup)
+    if url_first_img is not None:
+        return ensure_domain(url_first_img, domain)
+
+    domain_first_img = get_first_img_from_url(url=domain)
+    if domain_first_img is not None:
+        return ensure_domain(domain_first_img, domain)
+
+    return get_default_img(text=url)
+
+
+def get_meta_icon_from_url(url, url_soup=None):
+    soup_icons, url_soup = get_soup_icons_from_url(url, url_soup)
+
+    if len(soup_icons) == 0:
+        img = None
+    else:
+        final_icon = soup_icons[0]
+        for soup_icon in soup_icons:
+            if get_soup_icon_size(soup_icon) >= get_soup_icon_size(final_icon):
+                final_icon = soup_icon
+        img = final_icon["href"]
+
+    return img, url_soup
+
+def get_soup_icons_from_url(url, url_soup=None):
+    if url_soup is None:
+        try:
+            url_request = requests.get(url)
+            url_soup = BeautifulSoup(url_request.text, features="html.parser")
+        except:
+            return None
+
+    soup_icons = url_soup.find_all(
         "link",
         attrs={
             "rel": [
@@ -36,46 +73,35 @@ def get_url_icon(url):
             ]
         },
     )
-    if len(soup_link) > 0:
-        icon = None
-        for icon_item in soup_link:
-            if not icon_item.has_attr("sizes"):
-                icon_item["sizes"] = "16x16"
-            if icon is None:
-                icon = icon_item
-            else:
-                if len(icon_item["sizes"]) < 9:
+    return soup_icons, url_soup
 
-                    if (
-                        len(icon_item["sizes"]) > len(icon_item["sizes"])
-                        or icon_item["sizes"].split("x")[0]
-                        > icon["sizes"].split("x")[0]
-                    ):
-                        icon = icon_item
-        img = icon["href"]
+def get_soup_icon_size(soup_icon):
+    if not soup_icon.has_attr("sizes"):
+        return 1
+    return int(soup_icon["sizes"].split("x")[0])
 
-    img = ensure_domain(url=img, domain=domain)
-    if img.split("/")[-1] == "favicon.ico":
-        r = requests.get(img)
-        if r.status_code == 404:
-            if soup.find("img") is None:
-                r = requests.get(domain)
-                if r.status_code != 404:
-                    soup = BeautifulSoup(r.text, features="html.parser")
-                    if soup.find("img") is not None:
-                        img = soup.find("img")["src"]
-                    else:
-                        img = get_default_img(text=href_parse.netloc)
-            else:
-                img = soup.find("img")["src"]
-    if not img.startswith("http"):
-        if img.startswith("/"):
-            separator = ""
-        else:
-            separator = "/"
-        img = separator.join([domain, img])
-    return img
+def get_favicon_from_url(url):
+    domain = extract_domain_from_url(url=url)
+    favicon = domain + "/favicon.ico"
+    favicon_request = requests.get(favicon)
 
+    if favicon_request.status_code == 404:
+        return None
+    else:
+        return favicon
+
+def get_first_img_from_url(url, url_soup=None):
+    url_request = requests.get(url)
+    if url_request.status_code == 404:
+        return None
+    if url_soup is None:
+        url_soup = BeautifulSoup(url_request.text, features="html.parser")
+
+    first_img = url_soup.find("img")
+    if first_img is not None:
+        return first_img["src"]
+    else:
+        return None
 
 def get_default_img(text):
     text = urllib.parse.quote(text,safe='=?&')
