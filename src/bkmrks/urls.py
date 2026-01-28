@@ -1,24 +1,24 @@
-from urllib.parse import urlparse
+import urllib
 
 import requests
 from bs4 import BeautifulSoup
 
 
 def ensure_domain(url, domain):
-    if urlparse(url).netloc == '' and urlparse(domain).netloc == '':
-        raise ValueError("url or domain must be a domain")
+    if urllib.parse.urlparse(url).netloc == '' and urllib.parse.urlparse(domain).netloc == '':
+        raise ValueError("`url` or `domain` must be a domain")
 
-    if urlparse(url).netloc == "":
-        parsed_url = urlparse(url)
-        parsed_domain = urlparse(domain)
+    if urllib.parse.urlparse(url).netloc == "":
+        parsed_url = urllib.parse.urlparse(url)
+        parsed_domain = urllib.parse.urlparse(domain)
         url = parsed_url._replace(scheme="https",netloc=parsed_domain.netloc).geturl()
 
-    url = urlparse(url)._replace(scheme="https").geturl()
+    url = urllib.parse.urlparse(url)._replace(scheme="https").geturl()
     return url
 
 
 def get_url_icon(url):
-    href_parse = urlparse(url)
+    href_parse = urllib.parse.urlparse(url)
     domain = "://".join([href_parse.scheme, href_parse.netloc])
     img = domain + "/favicon.ico"
     try:
@@ -78,15 +78,26 @@ def get_url_icon(url):
 
 
 def get_default_img(text):
+    text = urllib.parse.quote(text,safe='=?&')
     return f"https://ui-avatars.com/api/?name={text}"
 
 
 def get_name_by_url(url):
-    href_parse = urlparse(url)
+    href_parse = urllib.parse.urlparse(url)
+    country_code_len = 2
+
+    if href_parse.netloc == "":
+        raise ValueError("`url` must have a domain")
     name = href_parse.netloc.split(".")
 
-    if name[-2] == "google":
-        name = "_".join(name[:-1][::-1])
+    if len(name[-1]) == country_code_len:
+        name = name[:-1]
+
+    if name[0] == "www":
+        name = name[1:]
+
+    if len(name) > 2:
+        name = "_".join(name[-3:-1][::-1])
     else:
         name = name[-2]
     return name
@@ -95,7 +106,7 @@ def get_name_by_url(url):
 def extract_domain_from_url(url):
     domain = ""
 
-    url_parse = urlparse(url)
+    url_parse = urllib.parse.urlparse(url)
     if len(url_parse.netloc) > 0:
         domain = "://".join([url_parse.scheme, url_parse.netloc])
     return domain
