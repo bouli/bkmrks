@@ -41,9 +41,18 @@ def test_get_name_by_url():
     with pytest.raises(TypeError):
         urls.get_name_by_url()
     with pytest.raises(ValueError):
-        assert "testing" == urls.get_name_by_url(url="testing.com.br")
+        urls.get_name_by_url(url="testing.com.br")
     assert "testing" == urls.get_name_by_url(url="http://www.testing.com.br")
     assert "testing" == urls.get_name_by_url(url="http://testing.com.br")
     assert "testing" == urls.get_name_by_url(url="http://testing.com")
     assert "google_gservice" == urls.get_name_by_url(url="http://gservice.google.com")
     assert "google_gservice" == urls.get_name_by_url(url="http://subdomain.gservice.google.com")
+
+def test_extract_domain_from_url():
+    with pytest.raises(TypeError):
+        urls.extract_domain_from_url()
+
+    assert "http://www.testing.com.br" == urls.extract_domain_from_url(url="http://www.testing.com.br")
+    assert "http://www.testing.com.br" == urls.extract_domain_from_url(url="http://www.testing.com.br/path?param1#anchor")
+    assert "" == urls.extract_domain_from_url(url="www.testing.com.br")
+    assert "" == urls.extract_domain_from_url(url="/asdf")
