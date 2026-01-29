@@ -2,26 +2,22 @@ import os
 
 import markdown
 
-from bkmrks import bkmrks, md
-
+from bkmrks import md, folders, files
 
 def render():
-    bkmrks.ensure_catalogs_folder()
-    ensure_public_folder()
-
-    bookmarks = os.listdir(bkmrks.catalogs_folder())
+    bookmarks = os.listdir(folders.catalogs_folder())
     menu = []
     htmls = []
     for catalog in bookmarks:
-        md_file_name = "public/" + catalog
+        md_file_name = folders.public_folder(path=catalog)
         md_generated_file = md.generate(md_file_name=md_file_name, catalog=catalog)
         if md_generated_file is not None:
             htmls.append(generate_html(md_file_name))
             menu.append(
                 get_file_and_set_variable(
-                    file="templates/menu_item.html",
+                    file=folders.templates_folder(path="menu_item.html"),
                     variable="menu_item",
-                    content=catalog.split(".")[0],
+                    content=files.discard_ext(catalog),
                 )
             )
     menu = " | ".join(menu)
@@ -35,14 +31,17 @@ def render():
             f.write(html_content)
 
 
-def generate_html(md_file="public/index", template="index"):
-    ensure_public_folder()
-    md_file = md_file.split(".")[0] + ".md"
+def generate_html(md_file=None, template="index"):
+    if md_file is None:
+        md_file = folders.public_folder(path="index")
+
+    md_file = files.apply_extension(md_file,ext="md")
+
     with open(md_file, "r") as fm:
         html = set_template_content(
             markdown.markdown(fm.read()), template, extension="html"
         )
-        html_file = md_file.split(".")[0] + ".html"
+        html_file = files.apply_extension(file_path=md_file,ext="html")
         with open(html_file, "+w") as fh:
             fh.write(html)
     return html_file
@@ -55,23 +54,25 @@ def get_file_and_set_variable(file, variable, content):
 
 
 def get_template(base_file_name, extension="html"):
-    ensure_template_folder()
-    template = "{" + extension + "}"
 
-    html_file = "templates/" + base_file_name.split(".")[0] + f".{extension}"
-    if os.path.exists(html_file):
-        with open(html_file, "r") as f:
+    template = "{" + extension + "}"
+    path = files.apply_extension(base_file_name,extension)
+    files.discard_ext(file_path= base_file_name)
+
+    template_file = folders.templates_folder(path=path)
+    if os.path.exists(template_file):
+        with open(template_file, "r") as f:
             template = f.read()
 
         if extension == "html":
-            dirs = os.listdir("templates")
+            dirs = os.listdir(folders.templates_folder())
             for file in dirs:
                 if (
-                    file.split(".")[1] != "html"
-                    and file.split(".")[0] == base_file_name.split(".")[0]
+                    files.extract_ext(file) != "html"
+                    and files.discard_ext(file) == files.discard_ext(base_file_name)
                 ):
-                    innerextension = file.split(".")[1]
-                    innerfile = "templates/" + file
+                    innerextension = files.extract_ext(file)
+                    innerfile = folders.templates_folder(path=file)
                     with open(innerfile, "r") as f:
                         innertemplate = f.read()
                         template = template.replace(
@@ -82,25 +83,5 @@ def get_template(base_file_name, extension="html"):
 
 
 def set_template_content(content, base_file_name, extension="html"):
-    ensure_template_folder()
     template = get_template(base_file_name, extension=extension)
     return template.replace("{" + extension + "}", content)
-
-
-def ensure_public_folder():
-    if not os.path.exists("public"):
-        os.mkdir("public")
-
-
-def ensure_template_folder():
-    if not os.path.exists("templates"):
-        os.mkdir("templates")
-        default_templates_dir = os.path.join(
-            os.path.dirname(os.path.realpath(__file__)), "templates"
-        )
-        files = os.listdir(default_templates_dir)
-        for file in files:
-            if file.split(".")[1] in ["css", "html"]:
-                with open(os.path.join(default_templates_dir, file), "r+") as fr:
-                    with open(os.path.join("templates", file), "+w") as fw:
-                        fw.write(fr.read())

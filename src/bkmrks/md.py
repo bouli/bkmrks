@@ -1,8 +1,10 @@
-from bkmrks import bkmrks, urls
+from bkmrks import bkmrks, urls, folders, icons, files
 
+def generate(md_file_name=None, catalog="index"):
+    if md_file_name is None:
+        md_file_name = folders.public_folder(path="index")
 
-def generate(md_file_name="public/index", catalog="index"):
-    bookmarks = bkmrks.get(catalog=catalog)
+    bookmarks = bkmrks.get_catalog_data(catalog=catalog)
     md_file_content = ""
     if len(bookmarks) > 0:
         for line in bookmarks.values():
@@ -13,7 +15,8 @@ def generate(md_file_name="public/index", catalog="index"):
     if len(md_file_content) < 10:
         return None
 
-    md_file_name = md_file_name.split(".")[0] + ".md"
+    md_file_name = files.apply_extension(md_file_name,ext="md")
+
     with open(md_file_name, "+w") as f:
         f.write(md_file_content)
     return md_file_name
@@ -32,7 +35,7 @@ def md_a_img(item):
     if "img" in item:
         img = item["img"]
     else:
-        img = urls.get_default_img(text=name)
+        img = icons.get_default_img(text=name)
 
     return f'\n[![{name}]({img})]({url} "{name}")'
 

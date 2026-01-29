@@ -3,21 +3,16 @@ import os
 import yaml
 from bs4 import BeautifulSoup
 
-from bkmrks import urls, icons
+from bkmrks import urls, icons, folders, files
 
 
-def catalogs_folder():
-    return "catalogs"
+def get_catalog_data(catalog="index"):
+    catalog = files.apply_extension(catalog,ext="yaml")
 
-
-def get(catalog="index"):
-    ensure_catalogs_folder()
-    catalog = catalog.split(".")[0] + ".yaml"
-
-    if not os.path.exists(f"{catalogs_folder()}/{catalog}"):
+    if not os.path.exists(f"{folders.catalogs_folder()}/{catalog}"):
         return {}
 
-    with open(f"{catalogs_folder()}/{catalog}", "r") as f:
+    with open(f"{folders.catalogs_folder()}/{catalog}", "r") as f:
         catalog_data = yaml.safe_load(f.read())
         if catalog_data is None:
             return {}
@@ -25,13 +20,13 @@ def get(catalog="index"):
             return catalog_data
 
 
-def set(data, catalog="index"):
-    ensure_catalogs_folder()
-    catalog = catalog.split(".")[0] + ".yaml"
-    with open(f"{catalogs_folder()}/{catalog}", "+w") as f:
+def set_catalog_data(data, catalog="index"):
+    catalog = files.apply_extension(catalog,ext="yaml")
+
+    with open(f"{folders.catalogs_folder()}/{catalog}", "+w") as f:
         yaml.dump(data, f)
         f.seek(0)
-    return get(catalog=catalog)
+    return get_catalog_data(catalog=catalog)
 
 
 def html2catalog(html_file_name, catalog):
@@ -61,7 +56,7 @@ def html2catalog(html_file_name, catalog):
 
             item_index += 1
 
-    set(data=catalog_data, catalog=catalog)
+    set_catalog_data(data=catalog_data, catalog=catalog)
 
 
 def mv_url(
@@ -114,7 +109,7 @@ def remove_url(catalog="index", line_index=1, item_index=0):
 
 
 def edit_bookmark(url, catalog="index", line_index=1, item_index=0, action="add"):
-    catalog_data = get(catalog=catalog)
+    catalog_data = get_catalog_data(catalog=catalog)
     catalog_data_new = {}
     line_name = None
     item_name = None
@@ -165,7 +160,7 @@ def edit_bookmark(url, catalog="index", line_index=1, item_index=0, action="add"
     if action != "rm":
         catalog_data_new[line_name][item_name] = parse_url(url=url)
 
-    set(data=catalog_data_new, catalog=catalog)
+    set_catalog_data(data=catalog_data_new, catalog=catalog)
     return True
 
 
@@ -178,7 +173,7 @@ def get_url(
     line_index = at_least_1(line_index)
     item_index = at_least_1(item_index)
 
-    catalog_data = get(catalog=catalog)
+    catalog_data = get_catalog_data(catalog=catalog)
     if len(catalog_data) == 0:
         return
     if len(list(catalog_data.values())) >= line_index:
@@ -219,21 +214,6 @@ def get_bookmark_item(url, name, img):
     bookmark_item["img"] = img
 
     return bookmark_item
-
-
-def ensure_catalogs_folder():
-    if not os.path.exists(catalogs_folder()):
-        os.mkdir(catalogs_folder())
-        data = {
-            get_line_name(line_index=1): {
-                get_item_name(item_index=1): get_bookmark_item(
-                    url="https://github.com/bouli/bkmrks",
-                    name="bkmrks_sample_page",
-                    img="https://cesarcardoso.cc/README/1_bouli.png",
-                )
-            }
-        }
-        set(data=data)
 
 
 def at_least_1(number):
