@@ -17,7 +17,7 @@ def render():
                 get_file_and_set_variable(
                     file=folders.templates_folder(path="menu_item.html"),
                     variable="menu_item",
-                    content=files.discard_ext(catalog),
+                    content=files.extract_file_name_no_ext(catalog),
                 )
             )
     menu = " | ".join(menu)
@@ -35,13 +35,13 @@ def generate_html(md_file=None, template="index"):
     if md_file is None:
         md_file = folders.public_folder(path="index")
 
-    md_file = files.apply_extension(md_file,ext="md")
+    md_file = files.apply_ext(md_file,ext="md")
 
     with open(md_file, "r") as fm:
         html = set_template_content(
             markdown.markdown(fm.read()), template, extension="html"
         )
-        html_file = files.apply_extension(file_path=md_file,ext="html")
+        html_file = files.apply_ext(file_path=md_file,ext="html")
         with open(html_file, "+w") as fh:
             fh.write(html)
     return html_file
@@ -56,8 +56,7 @@ def get_file_and_set_variable(file, variable, content):
 def get_template(base_file_name, extension="html"):
 
     template = "{" + extension + "}"
-    path = files.apply_extension(base_file_name,extension)
-    files.discard_ext(file_path= base_file_name)
+    path = files.apply_ext(base_file_name,extension)
 
     template_file = folders.templates_folder(path=path)
     if os.path.exists(template_file):
@@ -69,7 +68,7 @@ def get_template(base_file_name, extension="html"):
             for file in dirs:
                 if (
                     files.extract_ext(file) != "html"
-                    and files.discard_ext(file) == files.discard_ext(base_file_name)
+                    and files.extract_file_name_no_ext(file) == files.extract_file_name_no_ext(base_file_name)
                 ):
                     innerextension = files.extract_ext(file)
                     innerfile = folders.templates_folder(path=file)

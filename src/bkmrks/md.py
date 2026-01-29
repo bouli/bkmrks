@@ -15,7 +15,7 @@ def generate(md_file_name=None, catalog="index"):
     if len(md_file_content) < 10:
         return None
 
-    md_file_name = files.apply_extension(md_file_name,ext="md")
+    md_file_name = files.apply_ext(md_file_name,ext="md")
 
     with open(md_file_name, "+w") as f:
         f.write(md_file_content)

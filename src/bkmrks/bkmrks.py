@@ -7,7 +7,7 @@ from bkmrks import urls, icons, folders, files
 
 
 def get_catalog_data(catalog="index"):
-    catalog = files.apply_extension(catalog,ext="yaml")
+    catalog = files.apply_ext(catalog,ext="yaml")
 
     if not os.path.exists(f"{folders.catalogs_folder()}/{catalog}"):
         return {}
@@ -21,7 +21,7 @@ def get_catalog_data(catalog="index"):
 
 
 def set_catalog_data(data, catalog="index"):
-    catalog = files.apply_extension(catalog,ext="yaml")
+    catalog = files.apply_ext(catalog,ext="yaml")
 
     with open(f"{folders.catalogs_folder()}/{catalog}", "+w") as f:
         yaml.dump(data, f)
