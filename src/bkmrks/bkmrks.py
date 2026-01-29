@@ -3,7 +3,7 @@ import os
 import yaml
 from bs4 import BeautifulSoup
 
-from bkmrks import urls
+from bkmrks import urls, icons
 
 
 def catalogs_folder():
@@ -50,7 +50,7 @@ def html2catalog(html_file_name, catalog):
     for soup_item in soup_all_hr_a_tags:
         if soup_item.has_attr("href") and not soup_item["href"].startswith("#"):
 
-            img = urls.get_img_from_a_soup_item(soup_item=soup_item, domain=domain)
+            img = icons.get_img_from_a_soup_item(soup_item=soup_item, domain=domain)
             url = urls.ensure_domain(url=soup_item["href"], domain=domain)
             name = urls.get_name_by_url(url=url)
 
@@ -203,11 +203,11 @@ def get_item_name(item_index):
 def parse_url(url, domain=None):
     if domain is not None:
         url = urls.ensure_domain(url=url, domain=domain)
-
     name = urls.get_name_by_url(url=url)
+    img=icons.get_url_icon(url=url)
 
     bookmark_item = get_bookmark_item(
-        url=url, name=name, img=urls.get_url_icon(url=url)
+        url=url, name=name, img=img
     )
     return bookmark_item
 
