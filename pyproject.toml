@@ -1,6 +1,6 @@
 [project]
 name = "bkmrks"
-version = "0.2.2"
+version = "0.2.3"
 license = "MIT"
 description = "🔖 Bkmrks helps you to manage your bookmarks."
 readme = "README.md"

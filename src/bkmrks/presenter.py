@@ -2,7 +2,8 @@ import os
 
 import markdown
 
-from bkmrks import md, folders, files
+from bkmrks import files, folders, md
+
 
 def render():
     bookmarks = os.listdir(folders.catalogs_folder())
@@ -35,13 +36,13 @@ def generate_html(md_file=None, template="index"):
     if md_file is None:
         md_file = folders.public_folder(path="index")
 
-    md_file = files.apply_ext(md_file,ext="md")
+    md_file = files.apply_ext(md_file, ext="md")
 
     with open(md_file, "r") as fm:
         html = set_template_content(
             markdown.markdown(fm.read()), template, extension="html"
         )
-        html_file = files.apply_ext(file_path=md_file,ext="html")
+        html_file = files.apply_ext(file_path=md_file, ext="html")
         with open(html_file, "+w") as fh:
             fh.write(html)
     return html_file
@@ -56,7 +57,7 @@ def get_file_and_set_variable(file, variable, content):
 def get_template(base_file_name, extension="html"):
 
     template = "{" + extension + "}"
-    path = files.apply_ext(base_file_name,extension)
+    path = files.apply_ext(base_file_name, extension)
 
     template_file = folders.templates_folder(path=path)
     if os.path.exists(template_file):
@@ -66,10 +67,9 @@ def get_template(base_file_name, extension="html"):
         if extension == "html":
             dirs = os.listdir(folders.templates_folder())
             for file in dirs:
-                if (
-                    files.extract_ext(file) != "html"
-                    and files.extract_file_name_no_ext(file) == files.extract_file_name_no_ext(base_file_name)
-                ):
+                if files.extract_ext(file) != "html" and files.extract_file_name_no_ext(
+                    file
+                ) == files.extract_file_name_no_ext(base_file_name):
                     innerextension = files.extract_ext(file)
                     innerfile = folders.templates_folder(path=file)
                     with open(innerfile, "r") as f:

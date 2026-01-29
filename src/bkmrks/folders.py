@@ -1,27 +1,31 @@
 import os
+
 from dotenv import load_dotenv
 
 load_dotenv()
 
+
 def public_folder(path=""):
     ensure_public_folder()
-    base_dir="public"
-    return apply_root_folder(path=base_dir,subpath=path)
+    base_dir = "public"
+    return apply_root_folder(path=base_dir, subpath=path)
+
 
 def catalogs_folder(path=""):
     ensure_catalogs_folder()
-    base_dir="catalogs"
-    return apply_root_folder(path=base_dir,subpath=path)
+    base_dir = "catalogs"
+    return apply_root_folder(path=base_dir, subpath=path)
+
 
 def templates_folder(path=""):
     ensure_template_folder()
-    base_dir="templates"
-    return apply_root_folder(path=base_dir,subpath=path)
+    base_dir = "templates"
+    return apply_root_folder(path=base_dir, subpath=path)
 
 
-def apply_root_folder(path,subpath=""):
-    root = os.getenv("BKMRKS_DIR_ROOT",".")
-    dir_name = os.path.join(root,path,subpath)
+def apply_root_folder(path, subpath=""):
+    root = os.getenv("BKMRKS_DIR_ROOT", ".")
+    dir_name = os.path.join(root, path, subpath)
     return dir_name
 
 
@@ -45,10 +49,12 @@ def ensure_template_folder():
                     with open(os.path.join(dir_to_ensure, file), "+w") as fw:
                         fw.write(fr.read())
 
+
 def ensure_catalogs_folder():
     dir_to_ensure = apply_root_folder(path="catalogs")
     if not os.path.exists(dir_to_ensure):
         from bkmrks import bkmrks
+
         os.mkdir(dir_to_ensure)
         data = {
             bkmrks.get_line_name(line_index=1): {

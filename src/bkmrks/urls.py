@@ -2,14 +2,18 @@ import urllib
 
 import requests
 
+
 def ensure_domain(url, domain):
-    if urllib.parse.urlparse(url).netloc == '' and urllib.parse.urlparse(domain).netloc == '':
+    if (
+        urllib.parse.urlparse(url).netloc == ""
+        and urllib.parse.urlparse(domain).netloc == ""
+    ):
         raise ValueError("`url` or `domain` must be a domain")
 
     if urllib.parse.urlparse(url).netloc == "":
         parsed_url = urllib.parse.urlparse(url)
         parsed_domain = urllib.parse.urlparse(domain)
-        url = parsed_url._replace(scheme="https",netloc=parsed_domain.netloc).geturl()
+        url = parsed_url._replace(scheme="https", netloc=parsed_domain.netloc).geturl()
 
     url = urllib.parse.urlparse(url)._replace(scheme="https").geturl()
     return url
@@ -57,6 +61,7 @@ def read_from_url_or_path(url_path):
             content = f.read()
     return content
 
+
 def ensure_relative_path(path, url):
     if path[0] == "/":
         return ensure_domain(url=path, domain=url)
@@ -70,7 +75,9 @@ def ensure_relative_path(path, url):
         parsed_url_path = parsed_url.path.split("/")[:-1]
     else:
         parsed_url_path = parsed_url.path.split("/")
-    url = parsed_url._replace(path="/".join(parsed_url_path),query="", params="", fragment="").geturl()
+    url = parsed_url._replace(
+        path="/".join(parsed_url_path), query="", params="", fragment=""
+    ).geturl()
 
     url = f"{url}/{path}"
     return url

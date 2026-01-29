@@ -3,12 +3,12 @@ import os
 import yaml
 from bs4 import BeautifulSoup
 
-from bkmrks import urls, icons, folders, files
+from bkmrks import files, folders, icons, urls
 
 
 def get_catalog_data(catalog="index"):
-    catalog = files.apply_ext(catalog,ext="yaml")
-    catalog_path = os.path.join(folders.catalogs_folder(),catalog)
+    catalog = files.apply_ext(catalog, ext="yaml")
+    catalog_path = os.path.join(folders.catalogs_folder(), catalog)
 
     if not os.path.exists(catalog_path):
         return {}
@@ -22,8 +22,8 @@ def get_catalog_data(catalog="index"):
 
 
 def set_catalog_data(data, catalog="index"):
-    catalog = files.apply_ext(catalog,ext="yaml")
-    catalog_path = os.path.join(folders.catalogs_folder(),catalog)
+    catalog = files.apply_ext(catalog, ext="yaml")
+    catalog_path = os.path.join(folders.catalogs_folder(), catalog)
 
     with open(catalog_path, "+w") as f:
         yaml.dump(data, f)
@@ -200,11 +200,9 @@ def parse_url(url, domain=None):
     if domain is not None:
         url = urls.ensure_domain(url=url, domain=domain)
     name = urls.get_name_from_domain(url=url)
-    img=icons.get_url_icon(url=url)
+    img = icons.get_url_icon(url=url)
 
-    bookmark_item = get_bookmark_item(
-        url=url, name=name, img=img
-    )
+    bookmark_item = get_bookmark_item(url=url, name=name, img=img)
     return bookmark_item
 
 

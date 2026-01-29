@@ -1,9 +1,11 @@
+import re
 import urllib
 
 import requests
 from bs4 import BeautifulSoup
-import re
+
 from bkmrks import urls
+
 
 def get_url_icon(url):
 
@@ -46,6 +48,7 @@ def get_meta_icon_from_url(url, url_soup=None):
     img = urls.ensure_relative_path(img, url)
     return img, url_soup
 
+
 def get_soup_icons_from_url(url, url_soup=None):
     if url_soup is None:
         try:
@@ -65,10 +68,12 @@ def get_soup_icons_from_url(url, url_soup=None):
     )
     return soup_icons, url_soup
 
+
 def get_soup_icon_size(soup_icon):
     if not soup_icon.has_attr("sizes"):
         return 1
     return int(soup_icon["sizes"].split("x")[0])
+
 
 def get_favicon_from_url(url):
     domain = urls.extract_domain_from_url(url=url)
@@ -79,6 +84,7 @@ def get_favicon_from_url(url):
         return None
     else:
         return favicon
+
 
 def get_first_img_from_url(url, url_soup=None):
     url_request = requests.get(url)
@@ -94,11 +100,12 @@ def get_first_img_from_url(url, url_soup=None):
     else:
         return None
 
+
 def get_default_img(text):
-    text = re.sub(r"[^a-zA-Z0-9./+]", '', text)
-    text = text.replace("www","").replace("https","")
-    text = text.replace("."," ").replace("/"," ").strip()
-    text = urllib.parse.quote(text,safe='=?&')
+    text = re.sub(r"[^a-zA-Z0-9./+]", "", text)
+    text = text.replace("www", "").replace("https", "")
+    text = text.replace(".", " ").replace("/", " ").strip()
+    text = urllib.parse.quote(text, safe="=?&")
     return f"https://ui-avatars.com/api/?name={text}"
 
 
