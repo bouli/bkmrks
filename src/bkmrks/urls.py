@@ -15,7 +15,7 @@ def ensure_domain(url, domain):
     return url
 
 
-def get_name_by_url(url):
+def get_name_from_domain(url):
     href_parse = urllib.parse.urlparse(url)
     country_code_len = 2
 
