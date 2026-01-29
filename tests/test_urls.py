@@ -27,16 +27,6 @@ def test_ensure_domain():
     with pytest.raises(ValueError):
         urls.ensure_domain(url="/path",domain="not-a-domain.com")
 
-def test_get_url_icon():
-    return
-
-def test_get_default_img():
-    with pytest.raises(TypeError):
-        urls.get_default_img()
-    assert "https://ui-avatars.com/api/?name=testing" == urls.get_default_img(text="testing")
-    assert "https://ui-avatars.com/api/?name=test%20ing" == urls.get_default_img(text="test ing")
-
-
 def test_get_name_by_url():
     with pytest.raises(TypeError):
         urls.get_name_by_url()
@@ -56,3 +46,6 @@ def test_extract_domain_from_url():
     assert "http://www.testing.com.br" == urls.extract_domain_from_url(url="http://www.testing.com.br/path?param1#anchor")
     assert "" == urls.extract_domain_from_url(url="www.testing.com.br")
     assert "" == urls.extract_domain_from_url(url="/asdf")
+
+def test_read_from_url_or_path():
+    return

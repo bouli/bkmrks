@@ -9,30 +9,24 @@ def get_url_icon(url):
 
     domain = urls.extract_domain_from_url(url=url)
     if len(domain) == 0:
-        print("get_default_img")
         return get_default_img(text=url)
 
     meta_icon, url_soup = get_meta_icon_from_url(url=url)
     if meta_icon is not None:
-        print("meta_icon",url)
         return meta_icon
 
     favicon = get_favicon_from_url(url=url)
     if favicon is not None:
-        print("favicon")
         return favicon
 
     url_first_img = get_first_img_from_url(url=url, url_soup=url_soup)
     if url_first_img is not None:
-        print("url_first")
         return urls.ensure_domain(url_first_img, domain)
 
     domain_first_img = get_first_img_from_url(url=domain)
     if domain_first_img is not None:
-        print("domain_icon")
         return urls.ensure_domain(domain_first_img, domain)
 
-    print("default")
     return get_default_img(text=url)
 
 
