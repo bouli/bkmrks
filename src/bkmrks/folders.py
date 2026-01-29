@@ -36,7 +36,7 @@ def ensure_public_folder():
 
 
 def ensure_template_folder():
-    dir_to_ensure = apply_root_folder(path="template")
+    dir_to_ensure = apply_root_folder(path="templates")
     if not os.path.exists(dir_to_ensure):
         os.mkdir(dir_to_ensure)
         default_templates_dir = os.path.join(
