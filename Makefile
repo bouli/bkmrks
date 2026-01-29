@@ -5,4 +5,7 @@ build:
 	uv build
 
 tests:
-	uv run --dev pytest -s
+	uv run --dev coverage run -m pytest -s
+
+report:
+	uv run --dev coverage report -m

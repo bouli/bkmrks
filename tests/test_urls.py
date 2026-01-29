@@ -36,6 +36,7 @@ def test_get_name_from_domain():
     tests.append({"expected_result":"testing",         "url":"http://www.testing.com.br"})
     tests.append({"expected_result":"testing",         "url":"http://testing.com.br"})
     tests.append({"expected_result":"testing",         "url":"http://testing.com"})
+    tests.append({"expected_result":"testing",         "url":"http://testing.cc"})
     tests.append({"expected_result":"google_gservice", "url":"http://gservice.google.com"})
     tests.append({"expected_result":"google_gservice", "url":"http://subdomain.gservice.google.com"})
     for test in tests:
