@@ -31,6 +31,8 @@ def get_name_from_domain(url):
 
     if len(name) > 2:
         name = "_".join(name[-3:-1][::-1])
+    elif len(name) == 1:
+        name = name[0]
     else:
         name = name[-2]
     return name
@@ -54,3 +56,21 @@ def read_from_url_or_path(url_path):
         with open(url_path, "r") as f:
             content = f.read()
     return content
+
+def ensure_relative_path(path, url):
+    if path[0] == "/":
+        return ensure_domain(url=path, domain=url)
+
+    if len(extract_domain_from_url(path)) > 0:
+        return path
+
+    parsed_url = urllib.parse.urlparse(url)
+    last_url_element = parsed_url.path.split("/")[-1]
+    if last_url_element.find(".") >= 0:
+        parsed_url_path = parsed_url.path.split("/")[:-1]
+    else:
+        parsed_url_path = parsed_url.path.split("/")
+    url = parsed_url._replace(path="/".join(parsed_url_path),query="", params="", fragment="").geturl()
+
+    url = f"{url}/{path}"
+    return url

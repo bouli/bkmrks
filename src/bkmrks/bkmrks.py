@@ -8,11 +8,12 @@ from bkmrks import urls, icons, folders, files
 
 def get_catalog_data(catalog="index"):
     catalog = files.apply_ext(catalog,ext="yaml")
+    catalog_path = os.path.join(folders.catalogs_folder(),catalog)
 
-    if not os.path.exists(f"{folders.catalogs_folder()}/{catalog}"):
+    if not os.path.exists(catalog_path):
         return {}
 
-    with open(f"{folders.catalogs_folder()}/{catalog}", "r") as f:
+    with open(catalog_path, "r") as f:
         catalog_data = yaml.safe_load(f.read())
         if catalog_data is None:
             return {}
@@ -22,10 +23,10 @@ def get_catalog_data(catalog="index"):
 
 def set_catalog_data(data, catalog="index"):
     catalog = files.apply_ext(catalog,ext="yaml")
+    catalog_path = os.path.join(folders.catalogs_folder(),catalog)
 
-    with open(f"{folders.catalogs_folder()}/{catalog}", "+w") as f:
+    with open(catalog_path, "+w") as f:
         yaml.dump(data, f)
-        f.seek(0)
     return get_catalog_data(catalog=catalog)
 
 

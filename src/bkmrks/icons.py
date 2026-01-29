@@ -35,6 +35,7 @@ def get_meta_icon_from_url(url, url_soup=None):
 
     if len(soup_icons) == 0:
         img = None
+        return img, url_soup
     else:
         final_icon = soup_icons[0]
         for soup_icon in soup_icons:
@@ -42,7 +43,7 @@ def get_meta_icon_from_url(url, url_soup=None):
                 final_icon = soup_icon
         img = final_icon["href"]
 
-    img = urls.ensure_domain(img, url)
+    img = urls.ensure_relative_path(img, url)
     return img, url_soup
 
 def get_soup_icons_from_url(url, url_soup=None):
