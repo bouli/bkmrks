@@ -19,8 +19,6 @@ def extract_file_name_no_ext(file_path:str) -> str:
 
 def extract_ext(file_path:str) -> str:
     file_name = os.path.basename(file_path)
-    if file_name == "":
-        return file_path
 
     file_name_elements = file_name.split(".")
     if len(file_name_elements) > 1:
