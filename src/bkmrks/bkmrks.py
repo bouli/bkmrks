@@ -92,7 +92,7 @@ def mv_url(
 #TODO: change `line_index` to `line_index_alias`
 def add_url(url, catalog="index", line_index=1, item_index=1):
     catalog_data = get_catalog_data(catalog=catalog)
-    line_index, index_alias = get_line_index_alias_from_catalog(line_index_alias=line_index, catalog_data=catalog_data)
+    line_index, line_alias = get_line_index_alias_from_catalog(line_index_alias=line_index, catalog_data=catalog_data)
     item_index = at_least_1(item_index)
 
     catalog_data_new = {}
@@ -143,7 +143,7 @@ def add_url(url, catalog="index", line_index=1, item_index=1):
 
 def remove_url(catalog="index", line_index=1, item_index=0):
     catalog_data = get_catalog_data(catalog=catalog)
-    line_index, index_alias = get_line_index_alias_from_catalog(line_index_alias=line_index, catalog_data=catalog_data)
+    line_index, line_alias = get_line_index_alias_from_catalog(line_index_alias=line_index, catalog_data=catalog_data)
     item_index = at_least_1(item_index)
 
     line_name = get_dict_key_by_index(dict_index=line_index, dict_data=catalog_data)
@@ -166,7 +166,7 @@ def get_url(
 ):
     url = None
     catalog_data = get_catalog_data(catalog=catalog)
-    line_index, index_alias = get_line_index_alias_from_catalog(line_index_alias=line_index, catalog_data=catalog_data)
+    line_index, line_alias = get_line_index_alias_from_catalog(line_index_alias=line_index, catalog_data=catalog_data)
     item_index = at_least_1(item_index)
 
     if len(catalog_data) == 0:
