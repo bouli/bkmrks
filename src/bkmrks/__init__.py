@@ -19,7 +19,7 @@ def main():
     )
 
     load_parser.add_argument(
-        "-html",
+        "url_or_html_file",
         help="HTML file/url to scrape.",
     )
 
@@ -139,7 +139,7 @@ def main():
         presenter.render()
 
     if args.command == "load":
-        bkmrks.html2catalog(html_file_name=args.html, catalog=args.catalog)
+        bkmrks.html2catalog(html_file_name=args.url_or_html_file, catalog=args.catalog)
         presenter.render()
 
     if args.command == "add":
