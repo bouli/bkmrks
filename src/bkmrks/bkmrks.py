@@ -73,6 +73,7 @@ def mv_url(
         line_index=from_line_index,
         item_index=from_item_index,
     )
+
     if url is None:
         return
     add_url(
@@ -90,6 +91,8 @@ def mv_url(
 
 
 def add_url(url, catalog="index", line_index=1, item_index=0):
+    line_index=at_least_1(line_index)
+    item_index=at_least_1(item_index)
     return edit_bookmark(
         url=url,
         catalog=catalog,
@@ -100,6 +103,8 @@ def add_url(url, catalog="index", line_index=1, item_index=0):
 
 
 def remove_url(catalog="index", line_index=1, item_index=0):
+    line_index=at_least_1(line_index)
+    item_index=at_least_1(item_index)
     return edit_bookmark(
         url="",
         catalog=catalog,
