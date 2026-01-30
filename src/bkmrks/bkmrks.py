@@ -89,57 +89,33 @@ def mv_url(
     )
     return True
 
-#TODO: change `line_index` to `line_index_alias`
 def add_url(url, catalog="index", line_index=1, item_index=1):
     catalog_data = get_catalog_data(catalog=catalog)
     line_index, line_alias = get_line_index_alias_from_catalog(line_index_alias=line_index, catalog_data=catalog_data)
     item_index = at_least_1(item_index)
 
-    catalog_data_new = {}
-
-    line_name = None
-    item_name = None
+    new_item = parse_url(url=url)
+    new_catalog_data = {}
 
     if len(catalog_data) < line_index:
-        catalog_data_new = catalog_data.copy()
+        new_line_name = create_line_name(line_index=len(catalog_data) + 1, line_alias=line_alias)
+        new_item_name = create_item_name(item_index=1)
 
-        line_name = create_line_name(line_index=len(catalog_data) + 1, line_alias=line_alias)
-        item_name = create_item_name(item_index=1)
-
-        catalog_data_new[line_name] = {}
-        catalog_data_new[line_name][item_name] = {}
+        new_catalog_data = catalog_data.copy()
+        new_catalog_data[new_line_name] = {}
+        new_catalog_data[new_line_name][new_item_name] = new_item
     else:
-        line_counter = 0
-        for catalog_line_name, catalog_line in catalog_data.items():
-            line_counter += 1
-            if len(catalog_line_name) < 8:
-                catalog_line_name = create_line_name(line_index=line_counter)
-            if line_index == line_counter:
-                line_name = catalog_line_name
-                catalog_data_new[catalog_line_name] = {}
-                item_counter = 0
-                for catalog_line_item in catalog_line.values():
-                    item_counter += 1
-                    if item_index == item_counter:
-                        catalog_data_new[catalog_line_name][
-                            create_item_name(item_index=item_counter)
-                        ] = {}
-                        item_name = create_item_name(item_index=item_counter)
-                        item_counter += 1
-                    catalog_data_new[catalog_line_name][
-                        create_item_name(item_index=item_counter)
-                    ] = catalog_line_item.copy()
-                if item_name is None:
-                    item_counter += 1
-                    catalog_data_new[catalog_line_name][create_item_name(item_index=item_counter)] = (
-                        {}
-                    )
-                    item_name = create_item_name(item_index=item_counter)
-            else:
-                catalog_data_new[catalog_line_name] = catalog_line.copy()
-    catalog_data_new[line_name][item_name] = parse_url(url=url)
+        line_to_add_name = get_dict_key_by_index(dict_index=line_index, dict_data=catalog_data)
 
-    set_catalog_data(data=catalog_data_new, catalog=catalog)
+        for line_name in catalog_data.keys():
+            line_items_list = list(catalog_data[line_name].values())
+            if line_name == line_to_add_name:
+                line_items_list.insert(item_index-1,new_item)
+
+            new_catalog_data[line_name] = list2line_items(line_items_list=line_items_list)
+
+    set_catalog_data(data=new_catalog_data, catalog=catalog)
+    return True
 
 def remove_url(catalog="index", line_index=1, item_index=0):
     catalog_data = get_catalog_data(catalog=catalog)
@@ -229,6 +205,13 @@ def get_line_index_alias_from_catalog(line_index_alias, catalog_data):
                 line_index = catalog_line_index + 1
                 break
     return line_index, line_alias
+
+def list2line_items(line_items_list:list)->dict:
+    items = {}
+    for item_index, item in enumerate (line_items_list,start=1):
+        item_name = create_item_name(item_index)
+        items[item_name] = item
+    return items
 
 def at_least_1(number):
     number = int(number)
