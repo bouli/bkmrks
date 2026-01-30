@@ -5,7 +5,7 @@ from bkmrks import bkmrks, presenter
 
 def main():
     parser = argparse.ArgumentParser(prog="bkmrks")
-    parser.add_argument("--version", action="version", version="%(prog)s v0.2.5")
+    parser.add_argument("--version", action="version", version="%(prog)s v0.3.0")
 
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
     render_parser = subparsers.add_parser(

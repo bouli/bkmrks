@@ -89,44 +89,58 @@ def mv_url(
     )
     return True
 
+
 def add_url(url, catalog="index", line_index=1, item_index=1):
     catalog_data = get_catalog_data(catalog=catalog)
-    line_index, line_alias = get_line_index_alias_from_catalog(line_index_alias=line_index, catalog_data=catalog_data)
+    line_index, line_alias = get_line_index_alias_from_catalog(
+        line_index_alias=line_index, catalog_data=catalog_data
+    )
     item_index = at_least_1(item_index)
 
     new_item = parse_url(url=url)
     new_catalog_data = {}
 
     if len(catalog_data) < line_index:
-        new_line_name = create_line_name(line_index=len(catalog_data) + 1, line_alias=line_alias)
+        new_line_name = create_line_name(
+            line_index=len(catalog_data) + 1, line_alias=line_alias
+        )
         new_item_name = create_item_name(item_index=1)
 
         new_catalog_data = catalog_data.copy()
         new_catalog_data[new_line_name] = {}
         new_catalog_data[new_line_name][new_item_name] = new_item
     else:
-        line_to_add_name = get_dict_key_by_index(dict_index=line_index, dict_data=catalog_data)
+        line_to_add_name = get_dict_key_by_index(
+            dict_index=line_index, dict_data=catalog_data
+        )
 
         for line_name in catalog_data.keys():
             line_items_list = list(catalog_data[line_name].values())
             if line_name == line_to_add_name:
-                line_items_list.insert(item_index-1,new_item)
+                line_items_list.insert(item_index - 1, new_item)
 
-            new_catalog_data[line_name] = list2line_items(line_items_list=line_items_list)
+            new_catalog_data[line_name] = list2line_items(
+                line_items_list=line_items_list
+            )
 
     set_catalog_data(data=new_catalog_data, catalog=catalog)
     return True
 
+
 def remove_url(catalog="index", line_index=1, item_index=0):
     catalog_data = get_catalog_data(catalog=catalog)
-    line_index, line_alias = get_line_index_alias_from_catalog(line_index_alias=line_index, catalog_data=catalog_data)
+    line_index, line_alias = get_line_index_alias_from_catalog(
+        line_index_alias=line_index, catalog_data=catalog_data
+    )
     item_index = at_least_1(item_index)
 
     line_name = get_dict_key_by_index(dict_index=line_index, dict_data=catalog_data)
     if line_name is None:
         return False
 
-    item_name = get_dict_key_by_index(dict_index=item_index, dict_data=catalog_data[line_name])
+    item_name = get_dict_key_by_index(
+        dict_index=item_index, dict_data=catalog_data[line_name]
+    )
     if item_name is None:
         return False
 
@@ -135,6 +149,7 @@ def remove_url(catalog="index", line_index=1, item_index=0):
 
     return True
 
+
 def get_url(
     catalog="index",
     line_index=1,
@@ -142,7 +157,9 @@ def get_url(
 ):
     url = None
     catalog_data = get_catalog_data(catalog=catalog)
-    line_index, line_alias = get_line_index_alias_from_catalog(line_index_alias=line_index, catalog_data=catalog_data)
+    line_index, line_alias = get_line_index_alias_from_catalog(
+        line_index_alias=line_index, catalog_data=catalog_data
+    )
     item_index = at_least_1(item_index)
 
     if len(catalog_data) == 0:
@@ -186,6 +203,7 @@ def get_bookmark_item(url, name, img):
 
     return bookmark_item
 
+
 def get_line_index_alias_from_catalog(line_index_alias, catalog_data):
     catalog_lines = list(catalog_data.keys())
 
@@ -206,12 +224,14 @@ def get_line_index_alias_from_catalog(line_index_alias, catalog_data):
                 break
     return line_index, line_alias
 
-def list2line_items(line_items_list:list)->dict:
+
+def list2line_items(line_items_list: list) -> dict:
     items = {}
-    for item_index, item in enumerate (line_items_list,start=1):
+    for item_index, item in enumerate(line_items_list, start=1):
         item_name = create_item_name(item_index)
         items[item_name] = item
     return items
+
 
 def at_least_1(number):
     number = int(number)
@@ -219,6 +239,7 @@ def at_least_1(number):
         number = 1
 
     return number
+
 
 def get_dict_key_by_index(dict_index, dict_data):
     dict_index = int(dict_index)
