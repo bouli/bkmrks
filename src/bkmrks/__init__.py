@@ -1,5 +1,4 @@
 import argparse
-import os
 
 from bkmrks import bkmrks, presenter
 
@@ -38,7 +37,7 @@ def main():
 
     add_parser.add_argument(
         "url",
-        help="URL bookrmark to add to the catalog.",
+        help="URL bookmark to add to the catalog.",
     )
 
     add_parser.add_argument(
