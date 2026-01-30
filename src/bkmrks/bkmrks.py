@@ -101,8 +101,9 @@ def add_url(url, catalog="index", line_index=1, item_index=1):
     new_catalog_data = {}
 
     if len(catalog_data) < line_index:
+        line_index = len(catalog_data) + 1
         new_line_name = create_line_name(
-            line_index=len(catalog_data) + 1, line_alias=line_alias
+            line_index=line_index, line_alias=line_alias
         )
         new_item_name = create_item_name(item_index=1)
 
@@ -218,9 +219,9 @@ def get_line_index_alias_from_catalog(line_index_alias, catalog_data):
         line_alias = str(line_index_alias)
         line_index = len(catalog_lines) + 1
 
-        for catalog_line_index, catalog_line_name in enumerate(catalog_lines):
+        for catalog_line_index, catalog_line_name in enumerate(catalog_lines, start=1):
             if line_alias == catalog_line_name[9:]:
-                line_index = catalog_line_index + 1
+                line_index = catalog_line_index
                 break
     return line_index, line_alias
 
