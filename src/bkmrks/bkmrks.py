@@ -92,9 +92,10 @@ def mv_url(
 #TODO: change `line_index` to `line_index_alias`
 def add_url(url, catalog="index", line_index=1, item_index=1):
     catalog_data = get_catalog_data(catalog=catalog)
-    catalog_data_new = {}
+    line_index, index_alias = get_line_index_alias_from_catalog(line_index_alias=line_index, catalog_data=catalog_data)
+    item_index = at_least_1(item_index)
 
-    line_index, line_alias = get_line_index_alias_from_catalog(line_index_alias=line_index, catalog_data=catalog_data)
+    catalog_data_new = {}
 
     line_name = None
     item_name = None
@@ -141,72 +142,22 @@ def add_url(url, catalog="index", line_index=1, item_index=1):
     set_catalog_data(data=catalog_data_new, catalog=catalog)
 
 def remove_url(catalog="index", line_index=1, item_index=0):
-    line_index=at_least_1(line_index)
-    item_index=at_least_1(item_index)
-    return edit_bookmark(
-        url="",
-        catalog=catalog,
-        line_index=line_index,
-        item_index=item_index,
-        action="rm",
-    )
-
-
-def edit_bookmark(url, catalog="index", line_index=1, item_index=0, action="add"):
     catalog_data = get_catalog_data(catalog=catalog)
-    catalog_data_new = {}
-    line_name = None
-    item_name = None
-    if action == "rm" and catalog_data == {}:
-        return
-    if len(catalog_data) < line_index and action == "add":
-        catalog_data_new = catalog_data.copy()
+    line_index, index_alias = get_line_index_alias_from_catalog(line_index_alias=line_index, catalog_data=catalog_data)
+    item_index = at_least_1(item_index)
 
-        line_name = get_line_name(line_index=len(catalog_data) + 1)
-        item_name = get_item_name(item_index=1)
+    line_name = get_dict_key_by_index(dict_index=line_index, dict_data=catalog_data)
+    if line_name is None:
+        return False
 
-        catalog_data_new[line_name] = {}
-        catalog_data_new[line_name][item_name] = {}
-    else:
-        line_index = at_least_1(line_index)
-        item_index = at_least_1(item_index)
-        i = 0
-        for catalog_line_name, catalog_line in catalog_data.items():
-            i += 1
-            if len(catalog_line_name) < 8:
-                catalog_line_name = get_line_name(line_index=i)
-            if line_index == i:
-                line_name = catalog_line_name
-                catalog_data_new[catalog_line_name] = {}
-                j = 0
-                for catalog_line_item in catalog_line.values():
-                    j += 1
-                    if item_index == j and action == "add":
-                        catalog_data_new[catalog_line_name][
-                            get_item_name(item_index=j)
-                        ] = {}
-                        item_name = get_item_name(item_index=j)
-                        j += 1
-                    if item_index == j and action == "rm":
-                        print("")
-                    else:
-                        catalog_data_new[catalog_line_name][
-                            get_item_name(item_index=j)
-                        ] = catalog_line_item.copy()
-                if item_name is None and action == "add":
-                    j += 1
-                    catalog_data_new[catalog_line_name][get_item_name(item_index=j)] = (
-                        {}
-                    )
-                    item_name = get_item_name(item_index=j)
-            else:
-                catalog_data_new[catalog_line_name] = catalog_line.copy()
-    if action != "rm":
-        catalog_data_new[line_name][item_name] = parse_url(url=url)
+    item_name = get_dict_key_by_index(dict_index=item_index, dict_data=catalog_data[line_name])
+    if item_name is None:
+        return False
 
-    set_catalog_data(data=catalog_data_new, catalog=catalog)
+    catalog_data[line_name].pop(item_name)
+    set_catalog_data(data=catalog_data, catalog=catalog)
+
     return True
-
 
 def get_url(
     catalog="index",
@@ -214,10 +165,10 @@ def get_url(
     item_index=1,
 ):
     url = None
-    line_index = at_least_1(line_index)
+    catalog_data = get_catalog_data(catalog=catalog)
+    line_index, index_alias = get_line_index_alias_from_catalog(line_index_alias=line_index, catalog_data=catalog_data)
     item_index = at_least_1(item_index)
 
-    catalog_data = get_catalog_data(catalog=catalog)
     if len(catalog_data) == 0:
         return
     if len(list(catalog_data.values())) >= line_index:
@@ -285,3 +236,12 @@ def at_least_1(number):
         number = 1
 
     return number
+
+def get_dict_key_by_index(dict_index, dict_data):
+    dict_index = int(dict_index)
+    dict_key = ""
+    if len(dict_data) < dict_index:
+        return None
+
+    dict_key = list(dict_data.keys())[dict_index - 1]
+    return dict_key
