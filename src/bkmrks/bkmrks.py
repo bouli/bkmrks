@@ -40,7 +40,7 @@ def html2catalog(html_file_name, catalog):
     line_index = 1
     item_index = 1
     catalog_data = {}
-    line_name = get_line_name(line_index=line_index)
+    line_name = create_line_name(line_index=line_index)
     catalog_data[line_name] = {}
 
     for soup_item in soup_all_hr_a_tags:
@@ -52,7 +52,7 @@ def html2catalog(html_file_name, catalog):
 
             bookmark_item = get_bookmark_item(url=url, name=name, img=img)
 
-            item_name = get_item_name(item_index=item_index)
+            item_name = create_item_name(item_index=item_index)
             catalog_data[line_name][item_name] = bookmark_item.copy()
 
             item_index += 1
@@ -103,8 +103,8 @@ def add_url(url, catalog="index", line_index=1, item_index=1):
     if len(catalog_data) < line_index:
         catalog_data_new = catalog_data.copy()
 
-        line_name = get_line_name(line_index=len(catalog_data) + 1, line_alias=line_alias)
-        item_name = get_item_name(item_index=1)
+        line_name = create_line_name(line_index=len(catalog_data) + 1, line_alias=line_alias)
+        item_name = create_item_name(item_index=1)
 
         catalog_data_new[line_name] = {}
         catalog_data_new[line_name][item_name] = {}
@@ -113,7 +113,7 @@ def add_url(url, catalog="index", line_index=1, item_index=1):
         for catalog_line_name, catalog_line in catalog_data.items():
             line_counter += 1
             if len(catalog_line_name) < 8:
-                catalog_line_name = get_line_name(line_index=line_counter)
+                catalog_line_name = create_line_name(line_index=line_counter)
             if line_index == line_counter:
                 line_name = catalog_line_name
                 catalog_data_new[catalog_line_name] = {}
@@ -122,19 +122,19 @@ def add_url(url, catalog="index", line_index=1, item_index=1):
                     item_counter += 1
                     if item_index == item_counter:
                         catalog_data_new[catalog_line_name][
-                            get_item_name(item_index=item_counter)
+                            create_item_name(item_index=item_counter)
                         ] = {}
-                        item_name = get_item_name(item_index=item_counter)
+                        item_name = create_item_name(item_index=item_counter)
                         item_counter += 1
                     catalog_data_new[catalog_line_name][
-                        get_item_name(item_index=item_counter)
+                        create_item_name(item_index=item_counter)
                     ] = catalog_line_item.copy()
                 if item_name is None:
                     item_counter += 1
-                    catalog_data_new[catalog_line_name][get_item_name(item_index=item_counter)] = (
+                    catalog_data_new[catalog_line_name][create_item_name(item_index=item_counter)] = (
                         {}
                     )
-                    item_name = get_item_name(item_index=item_counter)
+                    item_name = create_item_name(item_index=item_counter)
             else:
                 catalog_data_new[catalog_line_name] = catalog_line.copy()
     catalog_data_new[line_name][item_name] = parse_url(url=url)
@@ -180,14 +180,14 @@ def get_url(
     return url
 
 
-def get_line_name(line_index, line_alias=""):
+def create_line_name(line_index, line_alias=""):
     line_name = f"line{line_index:04d}"
     if len(line_alias) > 0:
         line_name += f"_{line_alias}"
     return line_name
 
 
-def get_item_name(item_index):
+def create_item_name(item_index):
     item_name = f"item{item_index:04d}"
     return item_name
 

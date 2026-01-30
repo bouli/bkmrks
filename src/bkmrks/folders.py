@@ -57,8 +57,8 @@ def ensure_catalogs_folder():
 
         os.mkdir(dir_to_ensure)
         data = {
-            bkmrks.get_line_name(line_index=1): {
-                bkmrks.get_item_name(item_index=1): bkmrks.get_bookmark_item(
+            bkmrks.create_line_name(line_index=1): {
+                bkmrks.create_item_name(item_index=1): bkmrks.get_bookmark_item(
                     url="https://github.com/bouli/bkmrks",
                     name="bkmrks_sample_page",
                     img="https://cesarcardoso.cc/README/1_bouli.png",
