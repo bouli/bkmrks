@@ -146,7 +146,7 @@ def main():
         bkmrks.add_url(
             url=str(args.url),
             catalog=str(args.catalog),
-            line_index=int(args.line),
+            line_index=args.line,
             item_index=int(args.position),
         )
         presenter.render()
@@ -154,7 +154,7 @@ def main():
     if args.command == "rm":
         bkmrks.remove_url(
             catalog=str(args.catalog),
-            line_index=int(args.line),
+            line_index=args.line,
             item_index=int(args.position),
         )
         presenter.render()

@@ -269,7 +269,6 @@ def get_line_index_alias_from_catalog(line_index_alias, catalog_data):
             line_alias = catalog_lines[line_index - 1][9:]
         else:
             line_alias = ""
-        print('adsf')
     except:
         line_alias = str(line_index_alias)
         line_index = len(catalog_lines) + 1
