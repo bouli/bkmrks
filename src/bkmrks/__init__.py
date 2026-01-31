@@ -160,7 +160,7 @@ def main():
         presenter.render()
 
     if args.command == "mv":
-        bkmrks.mv_url(
+        bkmrks.move_url(
             from_catalog=args.from_catalog,
             from_line_index=args.from_line,
             from_item_index=args.from_position,

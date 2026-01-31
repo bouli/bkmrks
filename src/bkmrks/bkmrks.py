@@ -60,7 +60,7 @@ def html2catalog(html_file_name, catalog):
     set_catalog_data(data=catalog_data, catalog=catalog)
 
 
-def mv_url(
+def move_url(
     from_catalog="index",
     from_line_index=1,
     from_item_index=0,
