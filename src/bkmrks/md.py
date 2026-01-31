@@ -12,7 +12,7 @@ def generate(md_file_name=None, catalog="index"):
             if len(line) > 0:
                 for item in line.values():
                     md_file_content += md_a_img(item)
-            md_file_content += md_hr()
+                md_file_content += md_hr()
     if len(md_file_content) < 10:
         return None
 
