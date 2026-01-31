@@ -250,3 +250,9 @@ def get_dict_key_by_index(dict_index, dict_data):
 
     dict_key = list(dict_data.keys())[dict_index - 1]
     return dict_key
+
+def get_alias_from_line_name(line_name:str) -> str:
+    line_alias = ""
+    if line_name.find("_") > 0:
+        line_alias = line_name.split("_")[1]
+    return line_alias

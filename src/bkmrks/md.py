@@ -8,8 +8,11 @@ def generate(md_file_name=None, catalog="index"):
     bookmarks = bkmrks.get_catalog_data(catalog=catalog)
     md_file_content = ""
     if len(bookmarks) > 0:
-        for line in bookmarks.values():
+        #for line in bookmarks.values():
+        for line_name,line in bookmarks.items():
             if len(line) > 0:
+                line_alias = bkmrks.get_alias_from_line_name(line_name)
+                md_file_content += md_h3(line_alias)
                 for item in line.values():
                     md_file_content += md_a_img(item)
                 md_file_content += md_hr()
@@ -43,3 +46,8 @@ def md_a_img(item):
 
 def md_hr():
     return "\n---"
+
+def md_h3(text):
+    if len(text) == 0:
+        return ""
+    return f"\n### {text}"
