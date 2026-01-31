@@ -64,7 +64,7 @@ def move_bookmark(
     from_catalog="index",
     from_line_index=1,
     from_item_index=0,
-    to_catalog="index",
+    to_catalog=None,
     to_line_index=1,
     to_item_index=0,
 ):
@@ -77,16 +77,26 @@ def move_bookmark(
 
     if url is None:
         return
+
+    if to_catalog is None:
+        to_catalog = from_catalog
+
+    to_item_alias = None
+
+    if type(to_item_index) == int and type(from_item_index) == str:
+        to_item_alias = from_item_index
+
+    remove_bookmark(
+        catalog=from_catalog,
+        line_index=from_line_index,
+        item_index=from_item_index,
+    )
     add_bookmark(
         url=url,
         catalog=to_catalog,
         line_index=to_line_index,
         item_index=to_item_index,
-    )
-    remove_bookmark(
-        catalog=from_catalog,
-        line_index=from_line_index,
-        item_index=from_item_index,
+        item_alias = to_item_alias
     )
     return True
 
@@ -98,7 +108,10 @@ def add_bookmark(url, catalog="index", line_index=1, item_index=1, item_alias=No
     )
     try:
         item_index = int(item_index)
+        item_index = at_least_1(item_index)
+        item_alias = item_alias
     except:
+        item_alias = item_index
         item_index = 1
     new_item = create_item_from_url(url=url, alias=item_alias)
     new_catalog_data = {}
@@ -115,7 +128,6 @@ def add_bookmark(url, catalog="index", line_index=1, item_index=1, item_alias=No
         line_to_add_name = get_dict_key_by_index(
             dict_index=line_index, dict_data=catalog_data
         )
-
         for line_name in catalog_data.keys():
             line_items_list = list(catalog_data[line_name].values())
             if line_name == line_to_add_name:
@@ -124,7 +136,6 @@ def add_bookmark(url, catalog="index", line_index=1, item_index=1, item_alias=No
             new_catalog_data[line_name] = list2line_items(
                 line_items_list=line_items_list
             )
-
     set_catalog_data(data=new_catalog_data, catalog=catalog)
     return True
 
@@ -245,7 +256,7 @@ def create_item_name(item_index):
 def create_item_from_url(url, domain=None, alias=None):
     if domain is not None:
         url = urls.ensure_domain(url=url, domain=domain)
-    if alias is not None:
+    if alias is not None and type(alias) != int:
         name = alias
     else:
         name = urls.get_name_from_domain(url=url)
