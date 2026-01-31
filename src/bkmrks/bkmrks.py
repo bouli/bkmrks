@@ -150,6 +150,48 @@ def remove_url(catalog="index", line_index=1, item_index=0):
 
     return True
 
+def move_line(
+    from_catalog:str="index",
+    from_line_index=1,
+    to_catalog=None,
+    new_line_alias=None,
+):
+    if to_catalog == None:
+        to_catalog = from_catalog
+    from_catalog_data = get_catalog_data(catalog=from_catalog)
+    from_line_index, from_line_alias = get_line_index_alias_from_catalog(line_index_alias=from_line_index,catalog_data=from_catalog_data)
+    from_line_name = get_dict_key_by_index(dict_index=from_line_index, dict_data=from_catalog_data)
+
+    if new_line_alias is None:
+        new_line_alias = from_line_alias
+    new_line = from_catalog_data[from_line_name]
+
+    from_catalog_data.pop(from_line_name)
+    set_catalog_data(data= from_catalog_data,catalog=from_catalog)
+    add_line_to_catalog(catalog=to_catalog, new_line=new_line, new_line_alias=new_line_alias)
+
+    refresh_catalog_indexes(from_catalog)
+    if from_catalog!= to_catalog:
+        refresh_catalog_indexes(to_catalog)
+    return True
+
+def add_line_to_catalog(catalog, new_line, new_line_alias=""):
+    new_line_name = create_line_name(line_index=0, line_alias=new_line_alias)
+
+    catalog_data = dict({new_line_name:new_line},** get_catalog_data(catalog=catalog))
+    set_catalog_data(data=catalog_data, catalog=catalog)
+
+def refresh_catalog_indexes(catalog):
+    catalog_data = get_catalog_data(catalog=catalog)
+    new_catalog_data = {}
+    for new_line_index, line_name in enumerate(catalog_data, start=1):
+        if str(line_name).find("_")>=0:
+            new_line_alias = line_name.split("_")[1]
+        else:
+            new_line_alias = ""
+        new_line_name = create_line_name(line_index=new_line_index, line_alias=new_line_alias)
+        new_catalog_data[new_line_name] = catalog_data[line_name]
+    set_catalog_data(data=new_catalog_data, catalog=catalog)
 
 def get_url(
     catalog="index",

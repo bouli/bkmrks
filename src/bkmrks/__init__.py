@@ -8,11 +8,14 @@ def main():
     parser.add_argument("--version", action="version", version="%(prog)s v0.3.0")
 
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
+
+    ## render
     render_parser = subparsers.add_parser(
         "render",
         help="✍️   Render your html bookmarks to public folder.",
     )
 
+    ## load
     load_parser = subparsers.add_parser(
         "load",
         help="📚 Load and HTML file/url and create a bookmark page.",
@@ -30,6 +33,7 @@ def main():
         default="index",
     )
 
+    ## add
     add_parser = subparsers.add_parser(
         "add",
         help="✍️   Add a bookmark to catalog.",
@@ -61,6 +65,7 @@ def main():
         default="0",
     )
 
+    ## rm
     rm_parser = subparsers.add_parser(
         "rm",
         help="❌ Remove a bookmark from catalog.",
@@ -87,6 +92,7 @@ def main():
         default="1",
     )
 
+    ## mv
     mv_parser = subparsers.add_parser(
         "mv",
         help="🔄 Move a bookmark from a catalog to another.",
@@ -134,6 +140,44 @@ def main():
         default="1",
     )
 
+    ## mvl
+    mvl_parser = subparsers.add_parser(
+        "mvl",
+        help="🔄 Move a line from a catalog to another.",
+    )
+
+    mvl_parser.add_argument(
+        "-from_catalog",
+        "-fc",
+        help="Line catalog name to move from.",
+        default="index",
+    )
+
+    mvl_parser.add_argument(
+        "-line",
+        "-l",
+        "-fl",
+        help="Line of the catalog to move from.",
+        default="1",
+    )
+
+    mvl_parser.add_argument(
+        "-to_catalog",
+        "-tc",
+        help="Catalog name to move to. (default is the same of `-from_catalog`)",
+        default=None,
+    )
+
+    mvl_parser.add_argument(
+        "-new_alias",
+        "-a",
+        "-na",
+        "-tl",
+        help="New alias to assume in the catalog.",
+        default=None,
+    )
+
+
     args = parser.parse_args()
     if args.command == "render":
         presenter.render()
@@ -169,6 +213,16 @@ def main():
             to_item_index=args.to_position,
         )
         presenter.render()
+
+    if args.command == "mvl":
+        bkmrks.move_line(
+            from_catalog=args.from_catalog,
+            from_line_index=args.line,
+            to_catalog=args.to_catalog,
+            new_line_alias=args.new_alias,
+        )
+        presenter.render()
+
     return
 
 
