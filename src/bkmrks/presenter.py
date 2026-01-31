@@ -47,10 +47,14 @@ def generate_html(md_file=None, template="index"):
         html = set_template_content(
             markdown.markdown(fm.read()), template, extension="html"
         )
-        html_file = files.apply_ext(file_path=md_file, ext="html")
-        with open(html_file, "+w") as fh:
+
+        catalog = files.extract_file_name_no_ext(file_path=md_file)
+        html = html.replace("{__catalog__}", catalog)
+
+        html_file_name = files.apply_ext(file_path=md_file, ext="html")
+        with open(html_file_name, "+w") as fh:
             fh.write(html)
-    return html_file
+    return html_file_name
 
 
 def get_file_and_set_variable(file, variable, content):

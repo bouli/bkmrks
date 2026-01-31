@@ -177,3 +177,7 @@ p {
 .menu a:hover {
   color: #aaa;
 }
+
+.menu .menu_seleted {
+  display:none;
+}
