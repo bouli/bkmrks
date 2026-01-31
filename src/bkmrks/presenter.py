@@ -96,10 +96,11 @@ def clean_public_folder():
     public_folder_files = os.listdir(public_folder)
     delete_files(files=public_folder_files, folder=public_folder)
 
-def delete_files(files:list, folder=""):
+
+def delete_files(files: list, folder=""):
     for file in files:
         try:
-            file = os.path.join(folder,file)
+            file = os.path.join(folder, file)
             if os.path.basename(file) != "":
                 os.remove(file)
         except:
