@@ -97,7 +97,7 @@ def add_url(url, catalog="index", line_index=1, item_index=1):
     )
     item_index = at_least_1(item_index)
 
-    new_item = parse_url(url=url)
+    new_item = create_item_from_url(url=url)
     new_catalog_data = {}
 
     if len(catalog_data) < line_index:
@@ -186,7 +186,7 @@ def create_item_name(item_index):
     return item_name
 
 
-def parse_url(url, domain=None):
+def create_item_from_url(url, domain=None):
     if domain is not None:
         url = urls.ensure_domain(url=url, domain=domain)
     name = urls.get_name_from_domain(url=url)
