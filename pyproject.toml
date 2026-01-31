@@ -42,6 +42,9 @@ replace = 'version = "{new_version}"'
 filename = "README.md"
 
 [[tool.bumpversion.files]]
+filename = "Makefile"
+
+[[tool.bumpversion.files]]
 filename = "src/bkmrks/__init__.py"
 
 [dependency-groups]

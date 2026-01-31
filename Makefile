@@ -9,3 +9,6 @@ testss:
 
 report:
 	uv run --dev coverage report -m
+
+prepare:
+	git log v0.3.0..HEAD --oneline --format="* %h %s (%an)" > CHANGELOG.md
