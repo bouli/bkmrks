@@ -65,6 +65,14 @@ def main():
         default="0",
     )
 
+    add_parser.add_argument(
+        "-name_alias",
+        "-n",
+        "-a",
+        help="Personalized name/alias for your bookmark.",
+        default=None,
+    )
+
     ## rm
     rm_parser = subparsers.add_parser(
         "rm",
@@ -190,6 +198,7 @@ def main():
             catalog=str(args.catalog),
             line_index=args.line,
             item_index=args.bookmark_item,
+            item_alias=args.name_alias,
         )
         presenter.render()
 
