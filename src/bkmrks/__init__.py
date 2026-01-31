@@ -189,7 +189,7 @@ def main():
             url=str(args.url),
             catalog=str(args.catalog),
             line_index=args.line,
-            item_index=int(args.bookmark_item),
+            item_index=args.bookmark_item,
         )
         presenter.render()
 
@@ -197,7 +197,7 @@ def main():
         bkmrks.remove_bookmark(
             catalog=str(args.catalog),
             line_index=args.line,
-            item_index=int(args.bookmark_item),
+            item_index=args.bookmark_item,
         )
         presenter.render()
 

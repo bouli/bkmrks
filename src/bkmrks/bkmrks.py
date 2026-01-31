@@ -68,6 +68,7 @@ def move_bookmark(
     to_line_index=1,
     to_item_index=0,
 ):
+
     url = get_url(
         catalog=from_catalog,
         line_index=from_line_index,
@@ -90,14 +91,16 @@ def move_bookmark(
     return True
 
 
-def add_bookmark(url, catalog="index", line_index=1, item_index=1):
+def add_bookmark(url, catalog="index", line_index=1, item_index=1, item_alias=None):
     catalog_data = get_catalog_data(catalog=catalog)
     line_index, line_alias = get_line_index_alias_from_catalog(
         line_index_alias=line_index, catalog_data=catalog_data
     )
-    item_index = at_least_1(item_index)
-
-    new_item = create_item_from_url(url=url)
+    try:
+        item_index = int(item_index)
+    except:
+        item_index = 1
+    new_item = create_item_from_url(url=url, alias=item_alias)
     new_catalog_data = {}
 
     if len(catalog_data) < line_index:
@@ -131,7 +134,7 @@ def remove_bookmark(catalog="index", line_index=1, item_index=0):
     line_index, line_alias = get_line_index_alias_from_catalog(
         line_index_alias=line_index, catalog_data=catalog_data
     )
-    item_index = at_least_1(item_index)
+    item_index, item_alias = get_item_index_alias_from_catalog(item_index_alias=item_index, line_index_alias=line_index, catalog_data=catalog_data)
 
     line_name = get_dict_key_by_index(dict_index=line_index, dict_data=catalog_data)
     if line_name is None:
@@ -213,7 +216,8 @@ def get_url(
     line_index, line_alias = get_line_index_alias_from_catalog(
         line_index_alias=line_index, catalog_data=catalog_data
     )
-    item_index = at_least_1(item_index)
+
+    item_index, item_alias = get_item_index_alias_from_catalog(item_index_alias=item_index, line_index_alias=line_index, catalog_data=catalog_data)
 
     if len(catalog_data) == 0:
         return
@@ -238,10 +242,13 @@ def create_item_name(item_index):
     return item_name
 
 
-def create_item_from_url(url, domain=None):
+def create_item_from_url(url, domain=None, alias=None):
     if domain is not None:
         url = urls.ensure_domain(url=url, domain=domain)
-    name = urls.get_name_from_domain(url=url)
+    if alias is not None:
+        name = alias
+    else:
+        name = urls.get_name_from_domain(url=url)
     img = icons.get_url_icon(url=url)
 
     bookmark_item = get_bookmark_item(url=url, name=name, img=img)
@@ -309,3 +316,35 @@ def get_alias_from_line_name(line_name: str) -> str:
     if line_name.find("_") > 0:
         line_alias = line_name.split("_")[1]
     return line_alias
+
+
+def get_item_index_alias_from_catalog(item_index_alias, line_index_alias, catalog_data) :
+    line_index, line_alias = get_line_index_alias_from_catalog(
+        line_index_alias=line_index_alias, catalog_data=catalog_data
+    )
+    line_name = get_dict_key_by_index(
+        dict_index=line_index, dict_data=catalog_data
+    )
+
+    line_items = catalog_data[line_name]
+    try:
+        item_index = int(item_index_alias)
+        item_index = at_least_1(item_index)
+        if len(line_items) >= item_index:
+            line_name = list(line_items.keys())[item_index - 1]
+            item_alias = line_items[line_name]['name']
+        else:
+            item_alias = None
+
+    except:
+        item_alias = str(item_index_alias)
+        item_index = len(line_items) + 1
+
+        for line_item_index, line_item_name in enumerate(line_items, start=1):
+            if item_alias == line_items[line_item_name]['name']:
+                item_index = line_item_index
+                break
+        if item_index > len(line_items):
+            item_alias = None
+
+    return item_index, item_alias
