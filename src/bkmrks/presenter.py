@@ -6,12 +6,15 @@ from bkmrks import files, folders, md
 
 
 def render():
+    clean_public_folder()
     bookmarks = os.listdir(folders.catalogs_folder())
     menu = []
     htmls = []
+    mds = []
     for catalog in bookmarks:
         md_file_name = folders.public_folder(path=catalog)
         md_generated_file = md.generate(md_file_name=md_file_name, catalog=catalog)
+        mds.append(md_generated_file)
         if md_generated_file is not None:
             htmls.append(generate_html(md_file_name))
             menu.append(
@@ -30,6 +33,8 @@ def render():
         )
         with open(html, "+w") as f:
             f.write(html_content)
+
+    delete_files(files=mds)
 
 
 def generate_html(md_file=None, template="index"):
@@ -84,3 +89,15 @@ def get_template(base_file_name, extension="html"):
 def set_template_content(content, base_file_name, extension="html"):
     template = get_template(base_file_name, extension=extension)
     return template.replace("{" + extension + "}", content)
+
+
+def clean_public_folder():
+    public_folder = folders.public_folder()
+    public_folder_files = os.listdir(public_folder)
+    delete_files(files=public_folder_files, folder=public_folder)
+
+def delete_files(files:list, folder=""):
+    for file in files:
+        file = os.path.join(folder,file)
+        if os.path.basename(file) != "":
+            os.remove(file)
