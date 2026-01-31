@@ -11,4 +11,4 @@ report:
 	uv run --dev coverage report -m
 
 prepare:
-	git log v0.4.0..HEAD --oneline --format="* %h %s (%an)" > CHANGELOG.md
+	git log v0.4.1..HEAD --oneline --format="* %h %s (%an)" > CHANGELOG.md
