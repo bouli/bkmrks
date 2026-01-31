@@ -53,8 +53,10 @@ def extract_domain_from_url(url):
 
 def read_from_url_or_path(url_path):
     if str(url_path).startswith("https://"):
-        content = requests.get(url_path).text
-
+        try:
+            content = requests.get(url_path).text
+        except:
+            return ""
     else:
         url_path = url_path.split(".")[0] + ".html"
         with open(url_path, "r") as f:

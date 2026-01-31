@@ -35,7 +35,7 @@ def get_url_icon(url):
 def get_meta_icon_from_url(url, url_soup=None):
     soup_icons, url_soup = get_soup_icons_from_url(url, url_soup)
 
-    if len(soup_icons) == 0:
+    if soup_icons is None or len(soup_icons) == 0:
         img = None
         return img, url_soup
     else:
@@ -55,7 +55,7 @@ def get_soup_icons_from_url(url, url_soup=None):
             url_request = requests.get(url)
             url_soup = BeautifulSoup(url_request.text, features="html.parser")
         except:
-            return None
+            return None, None
 
     soup_icons = url_soup.find_all(
         "link",
@@ -78,7 +78,10 @@ def get_soup_icon_size(soup_icon):
 def get_favicon_from_url(url):
     domain = urls.extract_domain_from_url(url=url)
     favicon = domain + "/favicon.ico"
-    favicon_request = requests.get(favicon)
+    try:
+        favicon_request = requests.get(favicon)
+    except:
+        return None
 
     if favicon_request.status_code == 404 or "html" in favicon_request.text[:150]:
         return None
@@ -87,7 +90,11 @@ def get_favicon_from_url(url):
 
 
 def get_first_img_from_url(url, url_soup=None):
-    url_request = requests.get(url)
+    try:
+        url_request = requests.get(url)
+    except:
+        return None
+
     if url_request.status_code == 404:
         return None
     if url_soup is None:
