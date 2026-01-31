@@ -75,7 +75,6 @@ def main():
         "-catalog",
         "-c",
         help="Bookmark catalog name.",
-        default="index",
     )
 
     rm_parser.add_argument(
