@@ -59,9 +59,9 @@ def main():
     )
 
     add_parser.add_argument(
-        "-position",
-        "-p",
-        help="Position in the line of the catalog to add your bookmark.",
+        "-bookmark_item",
+        "-b",
+        help="Bookmark item in the line of the catalog to add your bookmark.",
         default="0",
     )
 
@@ -85,9 +85,9 @@ def main():
     )
 
     rm_parser.add_argument(
-        "-position",
-        "-p",
-        help="Position in the line of the catalog to remove your bookmark.",
+        "-bookmark_item",
+        "-b",
+        help="Bookmark item in the line of the catalog to remove your bookmark.",
         default="1",
     )
 
@@ -112,9 +112,9 @@ def main():
     )
 
     mv_parser.add_argument(
-        "-from_position",
-        "-fp",
-        help="Position in the line of the catalog to move from.",
+        "-from_bookmark_item",
+        "-fb",
+        help="Bookmark item in the line of the catalog to move from.",
         default="1",
     )
 
@@ -133,9 +133,9 @@ def main():
     )
 
     mv_parser.add_argument(
-        "-to_position",
-        "-tp",
-        help="Position in the line of the catalog to move to.",
+        "-to_bookmark_item",
+        "-tb",
+        help="Bookmark item in the line of the catalog to move to.",
         default="1",
     )
 
@@ -185,30 +185,30 @@ def main():
         presenter.render()
 
     if args.command == "add":
-        bkmrks.add_url(
+        bkmrks.add_bookmark(
             url=str(args.url),
             catalog=str(args.catalog),
             line_index=args.line,
-            item_index=int(args.position),
+            item_index=int(args.bookmark_item),
         )
         presenter.render()
 
     if args.command == "rm":
-        bkmrks.remove_url(
+        bkmrks.remove_bookmark(
             catalog=str(args.catalog),
             line_index=args.line,
-            item_index=int(args.position),
+            item_index=int(args.bookmark_item),
         )
         presenter.render()
 
     if args.command == "mv":
-        bkmrks.move_url(
+        bkmrks.move_bookmark(
             from_catalog=args.from_catalog,
             from_line_index=args.from_line,
-            from_item_index=args.from_position,
+            from_item_index=args.from_bookmark_item,
             to_catalog=args.to_catalog,
             to_line_index=args.to_line,
-            to_item_index=args.to_position,
+            to_item_index=args.to_bookmark_item,
         )
         presenter.render()
 

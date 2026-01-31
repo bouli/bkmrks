@@ -60,7 +60,7 @@ def html2catalog(html_file_name, catalog):
     set_catalog_data(data=catalog_data, catalog=catalog)
 
 
-def move_url(
+def move_bookmark(
     from_catalog="index",
     from_line_index=1,
     from_item_index=0,
@@ -76,13 +76,13 @@ def move_url(
 
     if url is None:
         return
-    add_url(
+    add_bookmark(
         url=url,
         catalog=to_catalog,
         line_index=to_line_index,
         item_index=to_item_index,
     )
-    remove_url(
+    remove_bookmark(
         catalog=from_catalog,
         line_index=from_line_index,
         item_index=from_item_index,
@@ -90,7 +90,7 @@ def move_url(
     return True
 
 
-def add_url(url, catalog="index", line_index=1, item_index=1):
+def add_bookmark(url, catalog="index", line_index=1, item_index=1):
     catalog_data = get_catalog_data(catalog=catalog)
     line_index, line_alias = get_line_index_alias_from_catalog(
         line_index_alias=line_index, catalog_data=catalog_data
@@ -126,7 +126,7 @@ def add_url(url, catalog="index", line_index=1, item_index=1):
     return True
 
 
-def remove_url(catalog="index", line_index=1, item_index=0):
+def remove_bookmark(catalog="index", line_index=1, item_index=0):
     catalog_data = get_catalog_data(catalog=catalog)
     line_index, line_alias = get_line_index_alias_from_catalog(
         line_index_alias=line_index, catalog_data=catalog_data
