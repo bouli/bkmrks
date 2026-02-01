@@ -2,7 +2,7 @@
    v2.0 | 20110126
    License: none (public domain)
 */
-
+/* index.css */
 html,
 body,
 div,
@@ -137,6 +137,8 @@ h3 {
   color:#777;
   padding:4px;
   font-size:small;
+  float: left;
+  position: fixed;
 }
 
 img {
@@ -147,7 +149,8 @@ img {
   background: #fff;
   border: 1px solid #fff;
 }
-a img:hover {
+
+a:hover img {
   width: 60px;
   height: 60px;
   margin: 25px;
@@ -157,12 +160,14 @@ a img:hover {
 p {
   display: inline;
 }
+
 .header {
   background: #333;
   padding: 15px;
   text-align: right;
   color: #ddd;
 }
+
 .menu {
   text-align: left;
   float: left;
@@ -180,4 +185,29 @@ p {
 
 .menu .menu_seleted {
   display:none;
+}
+
+.bkmrks_item {
+  display: inline;
+  text-align: center;
+}
+
+.bkmrks_item_label {
+  position: absolute;
+  width: 112px;
+  text-align: center;
+  padding-top: 100px;
+  color:#555;
+  font-size: smaller;
+}
+
+a:hover .bkmrks_item_label{
+  color:#AAA;
+  font-weight: bold;
+}
+
+h2 { /* md generator use h2 for lonely elements*/
+    display: block;
+    border-bottom: 1px solid #FFF;
+    padding-bottom: 0.5em;
 }
