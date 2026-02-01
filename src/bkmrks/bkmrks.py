@@ -370,6 +370,7 @@ def get_item_index_alias_from_catalog(item_index_alias, line_index_alias, catalo
 
     return item_index, item_alias
 
+
 def clean_catalogs():
     catalogs = os.listdir(folders.catalogs_folder())
     for catalog in catalogs:
@@ -382,7 +383,8 @@ def clean_catalogs():
         if len(new_catalog_data) == 0:
             remove_catalog(catalog)
         else:
-            set_catalog_data(data=new_catalog_data,catalog=catalog)
+            set_catalog_data(data=new_catalog_data, catalog=catalog)
+
 
 def remove_catalog(catalog):
     catalog_file = folders.catalogs_folder(path=catalog)

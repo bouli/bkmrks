@@ -2,7 +2,7 @@ import os
 
 import markdown
 
-from bkmrks import files, folders, md, bkmrks
+from bkmrks import bkmrks, files, folders, md
 
 
 def render():
