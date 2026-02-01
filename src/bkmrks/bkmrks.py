@@ -96,7 +96,7 @@ def move_bookmark(
         catalog=to_catalog,
         line_index=to_line_index,
         item_index=to_item_index,
-        item_alias = to_item_alias
+        item_alias=to_item_alias,
     )
     return True
 
@@ -145,7 +145,11 @@ def remove_bookmark(catalog="index", line_index=1, item_index=0):
     line_index, line_alias = get_line_index_alias_from_catalog(
         line_index_alias=line_index, catalog_data=catalog_data
     )
-    item_index, item_alias = get_item_index_alias_from_catalog(item_index_alias=item_index, line_index_alias=line_index, catalog_data=catalog_data)
+    item_index, item_alias = get_item_index_alias_from_catalog(
+        item_index_alias=item_index,
+        line_index_alias=line_index,
+        catalog_data=catalog_data,
+    )
 
     line_name = get_dict_key_by_index(dict_index=line_index, dict_data=catalog_data)
     if line_name is None:
@@ -228,7 +232,11 @@ def get_url(
         line_index_alias=line_index, catalog_data=catalog_data
     )
 
-    item_index, item_alias = get_item_index_alias_from_catalog(item_index_alias=item_index, line_index_alias=line_index, catalog_data=catalog_data)
+    item_index, item_alias = get_item_index_alias_from_catalog(
+        item_index_alias=item_index,
+        line_index_alias=line_index,
+        catalog_data=catalog_data,
+    )
 
     if len(catalog_data) == 0:
         return
@@ -329,13 +337,11 @@ def get_alias_from_line_name(line_name: str) -> str:
     return line_alias
 
 
-def get_item_index_alias_from_catalog(item_index_alias, line_index_alias, catalog_data) :
+def get_item_index_alias_from_catalog(item_index_alias, line_index_alias, catalog_data):
     line_index, line_alias = get_line_index_alias_from_catalog(
         line_index_alias=line_index_alias, catalog_data=catalog_data
     )
-    line_name = get_dict_key_by_index(
-        dict_index=line_index, dict_data=catalog_data
-    )
+    line_name = get_dict_key_by_index(dict_index=line_index, dict_data=catalog_data)
 
     line_items = catalog_data[line_name]
     try:
@@ -343,7 +349,7 @@ def get_item_index_alias_from_catalog(item_index_alias, line_index_alias, catalo
         item_index = at_least_1(item_index)
         if len(line_items) >= item_index:
             line_name = list(line_items.keys())[item_index - 1]
-            item_alias = line_items[line_name]['name']
+            item_alias = line_items[line_name]["name"]
         else:
             item_alias = None
 
@@ -352,7 +358,7 @@ def get_item_index_alias_from_catalog(item_index_alias, line_index_alias, catalo
         item_index = len(line_items) + 1
 
         for line_item_index, line_item_name in enumerate(line_items, start=1):
-            if item_alias == line_items[line_item_name]['name']:
+            if item_alias == line_items[line_item_name]["name"]:
                 item_index = line_item_index
                 break
         if item_index > len(line_items):
