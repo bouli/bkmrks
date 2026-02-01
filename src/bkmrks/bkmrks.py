@@ -98,6 +98,10 @@ def move_bookmark(
         item_index=to_item_index,
         item_alias=to_item_alias,
     )
+
+    refresh_catalog_indexes(from_catalog)
+    if from_catalog != to_catalog:
+        refresh_catalog_indexes(to_catalog)
     return True
 
 
@@ -217,7 +221,7 @@ def refresh_catalog_indexes(catalog):
         new_line_name = create_line_name(
             line_index=new_line_index, line_alias=new_line_alias
         )
-        new_catalog_data[new_line_name] = catalog_data[line_name]
+        new_catalog_data[new_line_name] = catalog_data[line_name].copy()
     set_catalog_data(data=new_catalog_data, catalog=catalog)
 
 
@@ -365,3 +369,22 @@ def get_item_index_alias_from_catalog(item_index_alias, line_index_alias, catalo
             item_alias = None
 
     return item_index, item_alias
+
+def clean_catalogs():
+    catalogs = os.listdir(folders.catalogs_folder())
+    for catalog in catalogs:
+        new_catalog_data = {}
+        catalog_data = get_catalog_data(catalog)
+        for line_name in catalog_data.keys():
+            if len(catalog_data[line_name]) > 0:
+                new_catalog_data[line_name] = catalog_data[line_name]
+
+        if len(new_catalog_data) == 0:
+            remove_catalog(catalog)
+        else:
+            set_catalog_data(data=new_catalog_data,catalog=catalog)
+
+def remove_catalog(catalog):
+    catalog_file = folders.catalogs_folder(path=catalog)
+    catalog_file = files.apply_ext(file_path=catalog_file, ext="yaml")
+    os.remove(catalog_file)

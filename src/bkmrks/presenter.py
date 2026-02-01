@@ -2,10 +2,11 @@ import os
 
 import markdown
 
-from bkmrks import files, folders, md
+from bkmrks import files, folders, md, bkmrks
 
 
 def render():
+    bkmrks.clean_catalogs()
     clean_public_folder()
     bookmarks = os.listdir(folders.catalogs_folder())
     menu = []
