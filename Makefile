@@ -1,14 +1,16 @@
 .PHONY: build, tests
-buildd:
+build:
 	uv sync
-	rm -r dist
+	rm -rf dist
 	uv build
 
-testss:
-	uv run --dev coverage run -m pytest -s
+tests:
+	uv run --dev coverage run --omit="./tests/*" -m pytest -s
 
 report:
 	uv run --dev coverage report -m
 
 prepare:
+	rm -rf dist
+	rm -rf build
 	git log v0.4.1..HEAD --oneline --format="* %h %s (%an)" > CHANGELOG.md
