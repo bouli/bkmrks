@@ -189,6 +189,9 @@ def move_line(
 
     if new_line_alias is None:
         new_line_alias = from_line_alias
+
+    if from_line_name not in from_catalog_data:
+        return
     new_line = from_catalog_data[from_line_name]
 
     from_catalog_data.pop(from_line_name)
