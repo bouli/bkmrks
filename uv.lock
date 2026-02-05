@@ -25,6 +25,7 @@ dependencies = [
     { name = "markdown" },
     { name = "pyyaml" },
     { name = "requests" },
+    { name = "urlicon" },
 ]
 
 [package.dev-dependencies]
@@ -40,6 +41,7 @@ requires-dist = [
     { name = "markdown", specifier = ">=3.10.1" },
     { name = "pyyaml", specifier = ">=6.0.3" },
     { name = "requests", specifier = ">=2.32.5" },
+    { name = "urlicon", specifier = ">=0.2.1" },
 ]
 
 [package.metadata.requires-dev]
@@ -487,6 +489,30 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/72/94/1a15dd82efb362ac84269196e94cf00f187f7ed21c242792a923cdb1c61f/typing_extensions-4.15.0.tar.gz", hash = "sha256:0cea48d173cc12fa28ecabc3b837ea3cf6f38c6d1136f85cbaaf598984861466", size = 109391, upload-time = "2025-08-25T13:49:26.313Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/18/67/36e9267722cc04a6b9f15c7f3441c2363321a3ea07da7ae0c0707beb2a9c/typing_extensions-4.15.0-py3-none-any.whl", hash = "sha256:f0fa19c6845758ab08074a0cfa8b7aecb71c999ca73d62883bc25cc018c4e548", size = 44614, upload-time = "2025-08-25T13:49:24.86Z" },
+]
+
+[[package]]
+name = "unforgettable"
+version = "0.1.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/52/38/8898214fa2549fd940668f6c6c530778d21135b15a6d2d77d348c7768039/unforgettable-0.1.0.tar.gz", hash = "sha256:f1f01d6ab903b6c883b8196e76d5fbe28109179dafc3e1fab1da62de99fe794c", size = 2920, upload-time = "2026-02-05T12:19:17.385Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/9d/dc/c44011eed98818ad99948c92620c0e341fd59d3529dc5e81163ee0d562ea/unforgettable-0.1.0-py3-none-any.whl", hash = "sha256:b6ea7d967e5c38c8ea4bbf2eeb1aa0e1865e67b42de051efceccd6e1b72235e5", size = 2978, upload-time = "2026-02-05T12:19:15.713Z" },
+]
+
+[[package]]
+name = "urlicon"
+version = "0.2.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "bs4" },
+    { name = "dotenv" },
+    { name = "requests" },
+    { name = "unforgettable" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/f7/ce/01e688260c9768dab0f243bada5d6e8821051de5cdb254b6a522ebe4fa00/urlicon-0.2.1.tar.gz", hash = "sha256:1d420f2f8908b3e082e80c06ca7088e67e57b041c3b82c807fc84faea9ac0523", size = 3801, upload-time = "2026-02-05T12:27:17.662Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f8/82/dddb868e8b0c7ccc3a442c62cda8248f2c777d34748cf0c8f34a5860ca34/urlicon-0.2.1-py3-none-any.whl", hash = "sha256:1fc5888ae71ae25cfd620b53b9c418adef9167cd0034d039c9f23aef6ff953b1", size = 4040, upload-time = "2026-02-05T12:27:18.433Z" },
 ]
 
 [[package]]

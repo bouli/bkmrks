@@ -1,5 +1,5 @@
-from bkmrks import bkmrks, files, folders, icons, urls
-
+from bkmrks import bkmrks, files, folders, urls
+from urlicon import urlicon
 
 def generate(md_file_name=None, catalog="index"):
     if md_file_name is None:
@@ -39,7 +39,7 @@ def md_a_img(item):
     if "img" in item:
         img = item["img"]
     else:
-        img = icons.get_default_img(text=name)
+        img = urlicon.get_default_img(text=name)
 
     return f'\n[![{name}]({img})]({url} "{name}")'
 
