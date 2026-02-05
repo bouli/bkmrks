@@ -2,9 +2,10 @@ import os
 
 import yaml
 from bs4 import BeautifulSoup
+from urlicon import urlicon
 
 from bkmrks import files, folders, urls
-from urlicon import urlicon
+
 
 def get_catalog_data(catalog="index"):
     catalog = files.apply_ext(catalog, ext="yaml")

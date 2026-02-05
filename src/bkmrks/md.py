@@ -1,5 +1,7 @@
-from bkmrks import bkmrks, files, folders, urls
 from urlicon import urlicon
+
+from bkmrks import bkmrks, files, folders, urls
+
 
 def generate(md_file_name=None, catalog="index"):
     if md_file_name is None:
