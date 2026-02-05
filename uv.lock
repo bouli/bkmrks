@@ -41,7 +41,7 @@ requires-dist = [
     { name = "markdown", specifier = ">=3.10.1" },
     { name = "pyyaml", specifier = ">=6.0.3" },
     { name = "requests", specifier = ">=2.32.5" },
-    { name = "urlicon", specifier = ">=0.2.1" },
+    { name = "urlicon", specifier = "==0.2.4" },
 ]
 
 [package.metadata.requires-dev]
@@ -502,7 +502,7 @@ wheels = [
 
 [[package]]
 name = "urlicon"
-version = "0.2.1"
+version = "0.2.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "bs4" },
@@ -510,9 +510,9 @@ dependencies = [
     { name = "requests" },
     { name = "unforgettable" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f7/ce/01e688260c9768dab0f243bada5d6e8821051de5cdb254b6a522ebe4fa00/urlicon-0.2.1.tar.gz", hash = "sha256:1d420f2f8908b3e082e80c06ca7088e67e57b041c3b82c807fc84faea9ac0523", size = 3801, upload-time = "2026-02-05T12:27:17.662Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b8/67/b563aa603cf6d1aecf2ace749ecd9e471598977412d022fd93d3c41da65c/urlicon-0.2.4.tar.gz", hash = "sha256:27b7ae7607c3f5e8a12dc907eb42632f4c6f5cb01545c2e868d21c50a2964be6", size = 3853, upload-time = "2026-02-05T20:30:48.378Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f8/82/dddb868e8b0c7ccc3a442c62cda8248f2c777d34748cf0c8f34a5860ca34/urlicon-0.2.1-py3-none-any.whl", hash = "sha256:1fc5888ae71ae25cfd620b53b9c418adef9167cd0034d039c9f23aef6ff953b1", size = 4040, upload-time = "2026-02-05T12:27:18.433Z" },
+    { url = "https://files.pythonhosted.org/packages/8c/4a/cf75c6e19fedbb6a0e21773dc9ff00ac3ee1f07fb5e3e15962cb20b70722/urlicon-0.2.4-py3-none-any.whl", hash = "sha256:d87cf727498bd79cce630a526fe352c9df27c17bda6828f041e5916e2d985f2f", size = 4083, upload-time = "2026-02-05T20:30:47.033Z" },
 ]
 
 [[package]]
