@@ -32,3 +32,24 @@ def test_get_template_inlines_same_base_assets_by_extension(monkeypatch, tmp_pat
     assert "{js}" not in html
     assert "{asset}" not in html
     assert "{html}" not in html
+
+
+def test_fresh_render_outputs_html_without_unresolved_template_assets(
+    monkeypatch, tmp_path
+):
+    monkeypatch.setenv("BKMRKS_DIR_ROOT", str(tmp_path))
+
+    presenter.render()
+
+    html_file = Path(folders.public_folder(path="index.html"))
+    assert html_file.exists()
+
+    html = html_file.read_text()
+    assert "{js}" not in html
+    assert "{css}" not in html
+    assert "{html}" not in html
+    assert "{menu}" not in html
+    assert "/* index.css */" in html
+    assert "function updateClock()" in html
+    assert "bkmrks_sample_page" in html
+    assert 'id="menu_selected_index"' in html
