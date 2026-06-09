@@ -10,4 +10,3 @@ wheels/
 .venv
 .coverage
 .env
-CHANGELOG.md
