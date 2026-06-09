@@ -45,6 +45,11 @@ search = 'version = "{current_version}"'
 replace = 'version = "{new_version}"'
 
 [[tool.bumpversion.files]]
+filename = "tests/test_init.py"
+search = 'bkmrks v{current_version}'
+replace = 'bkmrks v{new_version}'
+
+[[tool.bumpversion.files]]
 filename = "README.md"
 
 [[tool.bumpversion.files]]
