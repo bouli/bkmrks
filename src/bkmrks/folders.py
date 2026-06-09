@@ -44,7 +44,7 @@ def ensure_template_folder():
         )
         files = os.listdir(default_templates_dir)
         for file in files:
-            if file.split(".")[1] in ["css", "html"]:
+            if file.split(".")[1] in ["css", "html", "js"]:
                 with open(os.path.join(default_templates_dir, file), "r+") as fr:
                     with open(os.path.join(dir_to_ensure, file), "+w") as fw:
                         fw.write(fr.read())
