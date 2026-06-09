@@ -189,3 +189,15 @@ def test_fresh_render_outputs_html_without_unresolved_template_assets(
     assert "function updateClock()" in html
     assert "bkmrks_sample_page" in html
     assert 'id="menu_selected_index"' in html
+
+
+def test_render_backfills_missing_javascript_template(monkeypatch, tmp_path):
+    monkeypatch.setenv("BKMRKS_DIR_ROOT", str(tmp_path))
+    templates_dir = Path(folders.templates_folder())
+    (templates_dir / "index.js").unlink()
+
+    presenter.render()
+
+    html = Path(folders.public_folder(path="index.html")).read_text()
+    assert "{js}" not in html
+    assert "function updateClock()" in html

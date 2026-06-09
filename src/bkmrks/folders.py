@@ -39,14 +39,17 @@ def ensure_template_folder():
     dir_to_ensure = apply_root_folder(path="templates")
     if not os.path.exists(dir_to_ensure):
         os.mkdir(dir_to_ensure)
-        default_templates_dir = os.path.join(
-            os.path.dirname(os.path.realpath(__file__)), "templates"
-        )
-        files = os.listdir(default_templates_dir)
-        for file in files:
-            if file.split(".")[1] in ["css", "html", "js"]:
-                with open(os.path.join(default_templates_dir, file), "r+") as fr:
-                    with open(os.path.join(dir_to_ensure, file), "+w") as fw:
+
+    default_templates_dir = os.path.join(
+        os.path.dirname(os.path.realpath(__file__)), "templates"
+    )
+    files = os.listdir(default_templates_dir)
+    for file in files:
+        if os.path.splitext(file)[1].lstrip(".") in ["css", "html", "js"]:
+            template_file = os.path.join(dir_to_ensure, file)
+            if not os.path.exists(template_file):
+                with open(os.path.join(default_templates_dir, file), "r") as fr:
+                    with open(template_file, "w") as fw:
                         fw.write(fr.read())
 
 

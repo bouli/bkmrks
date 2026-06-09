@@ -63,6 +63,23 @@ def test_ensure_template_folder_copies_default_templates(monkeypatch, tmp_path):
     assert "function updateClock()" in (tmp_path / "templates" / "index.js").read_text()
 
 
+def test_ensure_template_folder_backfills_missing_default_templates(
+    monkeypatch, tmp_path
+):
+    monkeypatch.setenv("BKMRKS_DIR_ROOT", str(tmp_path))
+    templates_dir = tmp_path / "templates"
+    templates_dir.mkdir()
+    (templates_dir / "index.html").write_text("custom html {js}")
+    (templates_dir / "index.css").write_text("custom css")
+
+    folders.ensure_template_folder()
+
+    assert (templates_dir / "index.html").read_text() == "custom html {js}"
+    assert (templates_dir / "index.css").read_text() == "custom css"
+    assert "function updateClock()" in (templates_dir / "index.js").read_text()
+    assert (templates_dir / "menu_item.html").exists()
+
+
 def test_ensure_catalogs_folder_creates_sample_index(monkeypatch, tmp_path):
     monkeypatch.setenv("BKMRKS_DIR_ROOT", str(tmp_path))
 
