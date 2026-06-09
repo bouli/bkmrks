@@ -1,52 +1,86 @@
+import pytest
+
 from bkmrks import files
 
-def test_apply_ext():
-    tests = []
-    tests.append({"ext":"yaml", "file_path":"", "expected_result":""})
-    tests.append({"ext":"yaml", "file_path":"/", "expected_result":"/"})
-    tests.append({"ext":"yaml", "file_path":"/folder/", "expected_result":"/folder/"})
-    tests.append({"ext":"yaml", "file_path":"/folder/subfolder/", "expected_result":"/folder/subfolder/"})
 
-    tests.append({"ext":"yaml", "file_path":"/folder/fi.le.py", "expected_result":"/folder/fi.le.yaml"})
-    tests.append({"ext":"yaml", "file_path":"/folder/file.py", "expected_result":"/folder/file.yaml"})
-    tests.append({"ext":"yaml", "file_path":"/folder/file", "expected_result":"/folder/file.yaml"})
-    tests.append({"ext":"yaml", "file_path":"/file.py", "expected_result":"/file.yaml"})
-    tests.append({"ext":"yaml", "file_path":"file.py", "expected_result":"file.yaml"})
-    tests.append({"ext":"yaml", "file_path":"file", "expected_result":"file.yaml"})
+@pytest.mark.parametrize(
+    ("ext", "file_path", "expected_result"),
+    [
+        ("yaml", "", ""),
+        ("yaml", "/", "/"),
+        ("yaml", "/folder/", "/folder/"),
+        ("yaml", "/folder/subfolder/", "/folder/subfolder/"),
+        ("yaml", "/folder/fi.le.py", "/folder/fi.le.yaml"),
+        ("yaml", "/folder/file.py", "/folder/file.yaml"),
+        ("yaml", "/folder/file", "/folder/file.yaml"),
+        ("yaml", "/file.py", "/file.yaml"),
+        ("yaml", "file.py", "file.yaml"),
+        ("yaml", "file", "file.yaml"),
+        ("yaml", "folder/file.txt", "folder/file.yaml"),
+        ("yaml", "./folder/file.txt", "./folder/file.yaml"),
+        ("yaml", "archive.tar.gz", "archive.tar.yaml"),
+        ("yaml", "file.", "file.yaml"),
+        ("yaml", ".env", ""),
+    ],
+)
+def test_apply_ext(ext, file_path, expected_result):
+    assert files.apply_ext(ext=ext, file_path=file_path) == expected_result
 
-    for test in tests:
-        assert files.apply_ext(ext=test["ext"], file_path=test["file_path"]) == test["expected_result"]
+
+@pytest.mark.parametrize(
+    ("file_path", "expected_result"),
+    [
+        ("", ""),
+        ("/", ""),
+        ("/folder/", ""),
+        ("/folder/subfolder/", ""),
+        ("/folder/fi.le.py", "fi.le"),
+        ("/folder/file.py", "file"),
+        ("/folder/file", "file"),
+        ("/file.py", "file"),
+        ("file.py", "file"),
+        ("file", "file"),
+        ("folder/file.txt", "file"),
+        ("./folder/file.txt", "file"),
+        ("archive.tar.gz", "archive.tar"),
+        ("file.", "file"),
+        (".env", ""),
+    ],
+)
+def test_extract_file_name_no_ext(file_path, expected_result):
+    assert files.extract_file_name_no_ext(file_path=file_path) == expected_result
 
 
-def test_extract_file_name_no_ext():
-    tests = []
-    tests.append({"file_path":"", "expected_result":""})
-    tests.append({"file_path":"/", "expected_result":""})
-    tests.append({"file_path":"/folder/", "expected_result":""})
-    tests.append({"file_path":"/folder/subfolder/", "expected_result":""})
+@pytest.mark.parametrize(
+    ("file_path", "expected_result"),
+    [
+        ("", ""),
+        ("/", ""),
+        ("/folder/", ""),
+        ("/folder/subfolder/", ""),
+        ("/folder/fi.le.py", "py"),
+        ("/folder/file.py", "py"),
+        ("/folder/file", ""),
+        ("/file.py", "py"),
+        ("file.py", "py"),
+        ("file", ""),
+        ("folder/file.txt", "txt"),
+        ("./folder/file.txt", "txt"),
+        ("archive.tar.gz", "gz"),
+        ("file.", ""),
+        (".env", "env"),
+    ],
+)
+def test_extract_ext(file_path, expected_result):
+    assert files.extract_ext(file_path=file_path) == expected_result
 
-    tests.append({"file_path":"/folder/fi.le.py", "expected_result":"fi.le"})
-    tests.append({"file_path":"/folder/file.py", "expected_result":"file"})
-    tests.append({"file_path":"/folder/file", "expected_result":"file"})
-    tests.append({"file_path":"/file.py", "expected_result":"file"})
-    tests.append({"file_path":"file.py", "expected_result":"file"})
-    tests.append({"file_path":"file", "expected_result":"file"})
 
-    for test in tests:
-        assert files.extract_file_name_no_ext(file_path=test["file_path"]) == test["expected_result"]
+def test_file_helpers_require_arguments():
+    with pytest.raises(TypeError):
+        files.apply_ext()
 
-def test_extract_ext():
-    tests = []
-    tests.append({"file_path":"", "expected_result":""})
-    tests.append({"file_path":"/", "expected_result":""})
-    tests.append({"file_path":"/folder/", "expected_result":""})
-    tests.append({"file_path":"/folder/subfolder/", "expected_result":""})
-    tests.append({"file_path":"/folder/fi.le.py", "expected_result":"py"})
-    tests.append({"file_path":"/folder/file.py", "expected_result":"py"})
-    tests.append({"file_path":"/folder/file", "expected_result":""})
-    tests.append({"file_path":"/file.py", "expected_result":"py"})
-    tests.append({"file_path":"file.py", "expected_result":"py"})
-    tests.append({"file_path":"file", "expected_result":""})
+    with pytest.raises(TypeError):
+        files.extract_file_name_no_ext()
 
-    for test in tests:
-        assert files.extract_ext(file_path=test["file_path"]) == test["expected_result"]
+    with pytest.raises(TypeError):
+        files.extract_ext()
