@@ -21,7 +21,7 @@ def test_main_version_prints_current_version(monkeypatch, capsys):
         run_main(monkeypatch, ["--version"])
 
     assert exc_info.value.code == 0
-    assert capsys.readouterr().out == "bkmrks v0.5.4\n"
+    assert capsys.readouterr().out == "bkmrks v0.5.5\n"
 
 
 def test_main_render_dispatches_presenter_render(monkeypatch):
