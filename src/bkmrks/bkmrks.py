@@ -150,15 +150,15 @@ def remove_bookmark(catalog="index", line_index=1, item_index=0):
     line_index, line_alias = get_line_index_alias_from_catalog(
         line_index_alias=line_index, catalog_data=catalog_data
     )
+    line_name = get_dict_key_by_index(dict_index=line_index, dict_data=catalog_data)
+    if line_name is None:
+        return False
+
     item_index, item_alias = get_item_index_alias_from_catalog(
         item_index_alias=item_index,
         line_index_alias=line_index,
         catalog_data=catalog_data,
     )
-
-    line_name = get_dict_key_by_index(dict_index=line_index, dict_data=catalog_data)
-    if line_name is None:
-        return False
 
     item_name = get_dict_key_by_index(
         dict_index=item_index, dict_data=catalog_data[line_name]
